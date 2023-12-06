@@ -7,9 +7,13 @@ import { FIREBASE_AUTH } from "./FirebaseConfig";
 
 import React from "react";
 import { ProductPage } from "./app/screens/ProductPage";
+import { ProductDetails } from "./app/screens/ProductDetails";
+import { Cart } from "./app/screens/Cart"
+import CartButton from "./app/components/CartButton";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { CartContext } from "./app/components/CartContext";
 
 const Stack = createNativeStackNavigator();
-const InsideStack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -20,23 +24,45 @@ export default function App() {
     })
   );
 
+  const [cartVisible, setCartVisible] = useState(false);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        {user ? (
-          <Stack.Screen
-            name="All Products"
-            component={ProductPage}
-            options={{ headerShown: true }}
-          />
-        ) : (
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{ headerShown: false }}
-          />
-        )}
-      </Stack.Navigator>
+      <CartContext.Provider value={{ cartVisible, setCartVisible }}>
+        <Stack.Navigator initialRouteName="Login">
+          {user ? (
+            <>
+              <Stack.Screen
+                name="All Products"
+                  component={() => {return (
+                    <SafeAreaView>
+                      <Cart/>
+                      <ProductPage/>
+                    </SafeAreaView>
+                  )
+                }}
+                options={{
+                  headerRight: () => (
+                    <CartButton/>
+                  )
+                }}
+              />
+              
+              <Stack.Screen 
+                name="Product Details"
+                component={ProductDetails} 
+                options={{ headerShown: true }}
+              />
+            </>
+          ) : (
+            <Stack.Screen
+              name="Login"
+              component={Login}
+              options={{ headerShown: false }}
+            />
+          )}
+        </Stack.Navigator>
+      </CartContext.Provider>
     </NavigationContainer>
   );
 }

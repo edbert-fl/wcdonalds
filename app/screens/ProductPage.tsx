@@ -1,82 +1,77 @@
 import { useEffect, useState } from "react";
-import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView, Modal } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
-import { Card } from '@rneui/themed';
+import { Card } from "@rneui/themed";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from "@react-navigation/stack";
+import { cardStyles } from "./Styles"
+import { RootStackParamList } from "./Types";
 
-interface Product {
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    image: string;
-  }
+export interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+}
 
-const ProductList: React.FC<{ products: Product[] }> = ({ products }) => (
+interface ProductListProps {
+    products: Product[];
+    navigation: StackNavigationProp<RootStackParamList, 'All Products'>;
+}
+  
+const ProductList: React.FC<ProductListProps> = ({ products, navigation }) => {
+    const handleCardPress = (productId: string) => {
+        console.log(productId);
+        navigation.navigate('Product Details', { productId });
+    };
+
+return (
     <View>
-      {products.map(product => (
+    {products.map((product) => (
+      <TouchableOpacity key={product.id} onPress={() => handleCardPress(product.id)}>
         <Card>
-        <Image source={{ uri: product.image }} style={styles.image} />
-        <Text style={styles.name}>{product.name}</Text>
-        <Text style={styles.description}>{product.description}</Text>
-        <Text style={styles.price}>Price: ${product.price.toFixed(2)}</Text>
+          <Image source={{ uri: product.image }} style={cardStyles.image} />
+          <Text style={cardStyles.name}>{product.name}</Text>
+          <Text style={cardStyles.description}>{product.description}</Text>
+          <Text style={cardStyles.price}>Price: ${product.price.toFixed(2)}</Text>
         </Card>
-      ))}
+      </TouchableOpacity>
+    ))}
     </View>
-  );
-  
-export function ProductPage() {
-    const [products, setProducts] = useState<Product[]>([]);
-  
-    useEffect(() => {
-      const fetchProducts = async () => {
-        try {
-          const productsCollection = collection(FIRESTORE_DB, 'products');
-          const productsSnapshot = await getDocs(productsCollection);
-          const fetchedProducts: Product[] = productsSnapshot.docs.map((doc) => ({
-            id: doc.id,
-            name: doc.data().name,
-            description: doc.data().description,
-            price: doc.data().price,
-            image: doc.data().image
-          }));
-  
-          setProducts(fetchedProducts);
-        } catch (error) {
-          console.error("Error fetching products:", error);
-        }
-      };
-      fetchProducts();
-    }, []);
-  
-    return (
-      <ScrollView>
-        <ProductList products={products} />
-      </ScrollView>
-    );
-  }
+);
+};
 
-  const styles = StyleSheet.create({
-    image: {
-      width: '100%',
-      height: 200,
-      borderTopLeftRadius: 8,
-      borderBottomLeftRadius: 8,
-    },
-    name: {
-      fontSize: 18,
-      fontWeight: 'bold',
-      marginBottom: 4,
-    },
-    description: {
-      fontSize: 14,
-      color: '#555',
-      marginBottom: 4,
-    },
-    price: {
-      fontSize: 16,
-      fontWeight: 'bold',
-      color: '#E65100',
-    },
-  });
-    
+export const ProductPage: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const productsCollection = collection(FIRESTORE_DB, "products");
+        const productsSnapshot = await getDocs(productsCollection);
+        const fetchedProducts: Product[] = productsSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          name: doc.data().name,
+          description: doc.data().description,
+          price: doc.data().price,
+          image: doc.data().image,
+        }));
+
+        setProducts(fetchedProducts);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  return (
+    <SafeAreaView>
+      <ScrollView>
+        <ProductList products={products} navigation={useNavigation()} />
+      </ScrollView>
+    </SafeAreaView>
+  );
+}
