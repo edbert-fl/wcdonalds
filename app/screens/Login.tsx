@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, TextInput, ActivityIndicator, Button, KeyboardA
 import React, { useState } from 'react'
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
+import { loginStyles, theme } from './../utils/Styles'
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -36,13 +37,13 @@ const Login = () => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={loginStyles.container}>
             <KeyboardAvoidingView behavior='padding'>
-                <TextInput value={email} style={styles.input} placeholder="Email" autoCapitalize="none" onChangeText={(text) => setEmail(text)}></TextInput>
-                <TextInput value={password} style={styles.input} placeholder="password" autoCapitalize="none" secureTextEntry={true} onChangeText={(text) => setPassword(text)}></TextInput>
+                <TextInput value={email} style={loginStyles.input} placeholder="Email" autoCapitalize="none" onChangeText={(text) => setEmail(text)}></TextInput>
+                <TextInput value={password} style={loginStyles.input} placeholder="password" autoCapitalize="none" secureTextEntry={true} onChangeText={(text) => setPassword(text)}></TextInput>
 
                 { loading ? (
-                <ActivityIndicator size="large" color="#0000ff" />
+                <ActivityIndicator size="large" color={theme.colors.accent} />
                 ) : (
                 <>
                 <Button title="Login" onPress={signIn}/>
@@ -53,21 +54,5 @@ const Login = () => {
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    container: {
-        marginHorizontal: 20,
-        flex: 1,
-        justifyContent: 'center'
-    },
-    input: {
-        marginVertical: 4,
-        height: 50,
-        borderWidth: 1,
-        borderRadius: 4,
-        padding: 10,
-        backgroundColor: '#fff'
-    }
-});
 
 export default Login

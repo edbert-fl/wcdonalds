@@ -1,9 +1,19 @@
-import { createContext, useContext } from 'react';
+import { Dispatch, SetStateAction, createContext, useContext } from 'react';
+import { CartItem } from '../screens/Cart';
 
-export const CartContext = createContext({
+interface CartContextProps {
+    cart: CartItem[];
+    quantity: number;
+    cartVisible: boolean;
+    setCartVisible: Dispatch<SetStateAction<boolean>>;
+}
+
+export const CartContext = createContext<CartContextProps | undefined> ({
+    cart: [],
+    quantity: 0,
     cartVisible: false,
-    setCartVisible: (isVisible: boolean) => {}
-  });
+    setCartVisible: () => {}
+});
 
 export const useCart = () => {
   const context = useContext(CartContext);

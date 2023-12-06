@@ -1,7 +1,7 @@
 import { View, Text, TouchableHighlight } from 'react-native'
 import React, { useContext, useState } from 'react'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-import { theme } from '../screens/Styles'
+import { theme } from '../utils/Styles'
 import { useCart } from './CartContext'
 
 const CartButton = () => {

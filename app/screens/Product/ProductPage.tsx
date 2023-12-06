@@ -1,20 +1,13 @@
 import { useEffect, useState } from "react";
-import { ScrollView, View, Text, StyleSheet, Image, TouchableOpacity, SafeAreaView, Modal } from "react-native";
+import { ScrollView, View, Text, Image, TouchableOpacity, SafeAreaView, Modal } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
 import { Card } from "@rneui/themed";
-import { FIRESTORE_DB } from "../../FirebaseConfig";
+import { FIRESTORE_DB } from "../../../FirebaseConfig";
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from "@react-navigation/stack";
-import { cardStyles } from "./Styles"
-import { RootStackParamList } from "./Types";
-
-export interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-}
+import { cardStyles } from "../../utils/Styles"
+import { RootStackParamList } from "../../utils/Types";
+import { Product } from "../../utils/Interface";
 
 interface ProductListProps {
     products: Product[];
