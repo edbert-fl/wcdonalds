@@ -1,14 +1,14 @@
 // ProductDetails.tsx
 import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../../utils/Types';
+import { RootStackParamList } from '../utils/Types';
 import { Text, View, Image, TextInput, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { doc, getDoc } from 'firebase/firestore';
-import { FIRESTORE_DB } from '../../../FirebaseConfig';
+import { FIRESTORE_DB } from '../../FirebaseConfig';
 import { useEffect, useState } from 'react';
-import { productStyles, theme } from '../../utils/Styles';
+import { productStyles, theme } from '../utils/Styles';
 import { Divider } from '@rneui/base';
-import QuantitySelector from '../../components/QuantitySelector';
-import AddToCartButton from '../../components/AddToCartButton';
+import QuantitySelector from '../components/QuantitySelector';
+import AddToCartButton from '../components/AddToCartButton';
 
 type ProductDetailsRouteProp = RouteProp<RootStackParamList, 'Product Details'>;
 
@@ -19,6 +19,11 @@ interface ProductDetailsProps {
 export const ProductDetails: React.FC<ProductDetailsProps> = ({ route }) => {
     const { productID } = route.params;
     const [productData, setProductData] = useState<any>(null);
+    const [quantity, setQuantity] = useState(1);
+
+    const handleQuantityChange = (newQuantity: number) => {
+        setQuantity(newQuantity);
+      };
 
     useEffect(() => {
         const getProductData = async () => {
@@ -29,7 +34,6 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ route }) => {
 
                 if (documentSnapshot.exists()) {
                     const documentData = documentSnapshot.data();
-                    console.log("DocumentData: ", documentData)
                     setProductData(documentData);
                 } else {
                     console.log("Document does not exist!");
@@ -52,8 +56,8 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ route }) => {
                             <Text style={productStyles.name}>{productData.name}</Text>
                             <Text style={productStyles.price}>${productData.price.toFixed(2)}</Text>
                             <Text style={productStyles.description}>{productData.description}</Text>
-                            <QuantitySelector/>
-                            <AddToCartButton productID={productID} orderQty={1}/>
+                            <QuantitySelector quantity={quantity} onQuantityChange={handleQuantityChange}/>
+                            <AddToCartButton productID={productID} quantity={quantity}/>
                         </View>
                     </View>
                 </View>

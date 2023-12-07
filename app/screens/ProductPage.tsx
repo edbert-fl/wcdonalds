@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { ScrollView, View, Text, Image, TouchableOpacity, SafeAreaView, Modal } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
 import { Card } from "@rneui/themed";
-import { FIRESTORE_DB } from "../../../FirebaseConfig";
+import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from "@react-navigation/stack";
-import { cardStyles } from "../../utils/Styles"
-import { RootStackParamList } from "../../utils/Types";
-import { Product } from "../../utils/Interface";
+import { cardStyles } from "../utils/Styles"
+import { RootStackParamList } from "../utils/Types";
+import { Product } from "../utils/Interface";
 
 interface ProductListProps {
     products: Product[];
@@ -16,7 +16,6 @@ interface ProductListProps {
   
 const ProductList: React.FC<ProductListProps> = ({ products, navigation }) => {
     const handleCardPress = (productID: string) => {
-        console.log(productID);
         navigation.navigate('Product Details', { productID });
     };
 

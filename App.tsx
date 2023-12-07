@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import { FIREBASE_AUTH } from "./FirebaseConfig";
 
 import React from "react";
-import { ProductPage } from "./app/screens/Product/ProductPage";
-import { ProductDetails } from "./app/screens/Product/ProductDetails";
+import { ProductPage } from "./app/screens/ProductPage";
+import { ProductDetails } from "./app/screens/ProductDetails";
 import { Cart } from "./app/screens/Cart"
 import CartButton from "./app/components/CartButton";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -36,23 +36,21 @@ export default function App() {
             <>
               <Stack.Screen
                 name="All Products"
-                  component={() => {return (
-                    <SafeAreaView>
-                      <Cart/>
-                      <ProductPage/>
-                    </SafeAreaView>
-                  )
-                }}
                 options={{
-                  headerRight: () => (
-                    <CartButton/>
-                  )
+                  headerRight: () => <CartButton />,
                 }}
-              />
-              
-              <Stack.Screen 
+              >
+                {() => (
+                  <SafeAreaView>
+                    <Cart />
+                    <ProductPage />
+                  </SafeAreaView>
+                )}
+              </Stack.Screen>
+
+              <Stack.Screen
                 name="Product Details"
-                component={ProductDetails} 
+                component={ProductDetails}
                 options={{ headerShown: true }}
               />
             </>

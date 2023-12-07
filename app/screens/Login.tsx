@@ -14,7 +14,7 @@ const Login = () => {
         setLoading(true);
         try {
             const response = await signInWithEmailAndPassword(auth, email, password);
-            console.log(response);
+            console.log("Login.tsx: Successfully logged in");
         } catch (error: any) {
             console.log(error);
             alert('Sign in failed: ' + error.message);
@@ -27,7 +27,7 @@ const Login = () => {
         setLoading(true);
         try {
             const response = await createUserWithEmailAndPassword(auth, email, password);
-            console.log(response);
+            console.log("Login.tsx: Successfully created new user");
         } catch (error: any) {
             console.log(error);
             alert('Sign up failed: ' + error.message)

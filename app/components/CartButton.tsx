@@ -8,7 +8,7 @@ const CartButton = () => {
   const { cartVisible, setCartVisible } = useCart();
 
   return (
-    <TouchableHighlight onPress={() => { setCartVisible(true); console.log("Cart button pressed")}}>
+    <TouchableHighlight onPress={() => { setCartVisible(true); console.log("CartButton.tsx: Cart button pressed, loading cart...")}}>
         <View>
             <Icon name="shopping-cart" size={25} color={theme.colors.text} />
         </View>
