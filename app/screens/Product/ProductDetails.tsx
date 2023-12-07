@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { productStyles, theme } from '../../utils/Styles';
 import { Divider } from '@rneui/base';
 import QuantitySelector from '../../components/QuantitySelector';
+import AddToCartButton from '../../components/AddToCartButton';
 
 type ProductDetailsRouteProp = RouteProp<RootStackParamList, 'Product Details'>;
 
@@ -16,13 +17,13 @@ interface ProductDetailsProps {
 }
 
 export const ProductDetails: React.FC<ProductDetailsProps> = ({ route }) => {
-    const { productId } = route.params;
+    const { productID } = route.params;
     const [productData, setProductData] = useState<any>(null);
 
     useEffect(() => {
         const getProductData = async () => {
             try {
-                const documentRef = doc(FIRESTORE_DB, "products", productId)
+                const documentRef = doc(FIRESTORE_DB, "products", productID)
 
                 const documentSnapshot = await getDoc(documentRef);
 
@@ -38,7 +39,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ route }) => {
             }
         }
         getProductData();
-    }, [productId]);
+    }, [productID]);
 
     return (
         <KeyboardAvoidingView style={productStyles.productInfoContainer} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
@@ -48,10 +49,11 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ route }) => {
                     <Divider width={5} color={theme.colors.divider} />
                     <View style={productStyles.productInfoContainer}>
                         <View style={productStyles.productTextContainer}>
-                        <Text style={productStyles.name}>{productData.name}</Text>
-                        <Text style={productStyles.price}>${productData.price.toFixed(2)}</Text>
-                        <Text style={productStyles.description}>{productData.description}</Text>
-                        <QuantitySelector/>
+                            <Text style={productStyles.name}>{productData.name}</Text>
+                            <Text style={productStyles.price}>${productData.price.toFixed(2)}</Text>
+                            <Text style={productStyles.description}>{productData.description}</Text>
+                            <QuantitySelector/>
+                            <AddToCartButton productID={productID} orderQty={1}/>
                         </View>
                     </View>
                 </View>

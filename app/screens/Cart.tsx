@@ -6,16 +6,6 @@ import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { collection, doc, getDoc } from "firebase/firestore";
 import { Product } from "../utils/Interface";
 
-export class CartItem {
-    productID: string;
-    orderQty: number;
-
-    constructor(productID: string, orderQty: number) {
-        this.productID = productID;
-        this.orderQty = orderQty;
-    }
-}
-
 export const Cart = () => {
     const { cart, cartVisible, setCartVisible } = useCart();
     const [inCart, setInCart] = useState<any[]>([]);

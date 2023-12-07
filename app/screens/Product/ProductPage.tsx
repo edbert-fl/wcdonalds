@@ -15,9 +15,9 @@ interface ProductListProps {
 }
   
 const ProductList: React.FC<ProductListProps> = ({ products, navigation }) => {
-    const handleCardPress = (productId: string) => {
-        console.log(productId);
-        navigation.navigate('Product Details', { productId });
+    const handleCardPress = (productID: string) => {
+        console.log(productID);
+        navigation.navigate('Product Details', { productID });
     };
 
 return (

@@ -8,14 +8,13 @@ import { FIREBASE_AUTH } from "./FirebaseConfig";
 import React from "react";
 import { ProductPage } from "./app/screens/Product/ProductPage";
 import { ProductDetails } from "./app/screens/Product/ProductDetails";
-import { Cart, CartItem } from "./app/screens/Cart"
+import { Cart } from "./app/screens/Cart"
 import CartButton from "./app/components/CartButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CartContext } from "./app/components/CartContext";
+import { CartItem } from "./app/utils/Interface";
 
 const Stack = createNativeStackNavigator();
-
-let cart = [new CartItem("8OSidf59KlAOozsuXiGo", 2), new CartItem("bUx6ePMH55o0YPsVbbON", 1)]
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -26,11 +25,12 @@ export default function App() {
     })
   );
 
+  const [cart, setCart] = useState<CartItem[]>([]);
   const [cartVisible, setCartVisible] = useState(false);
 
   return (
     <NavigationContainer>
-      <CartContext.Provider value={{ cart, cartVisible, setCartVisible }}>
+      <CartContext.Provider value={{ cart, setCart, cartVisible, setCartVisible }}>
         <Stack.Navigator initialRouteName="Login">
           {user ? (
             <>
