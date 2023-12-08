@@ -21,6 +21,8 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ route }) => {
     const [productData, setProductData] = useState<any>(null);
     const [quantity, setQuantity] = useState(1);
 
+    console.log("ProductDetails.tsx: Page loaded.");
+    
     const handleQuantityChange = (newQuantity: number) => {
         setQuantity(newQuantity);
       };

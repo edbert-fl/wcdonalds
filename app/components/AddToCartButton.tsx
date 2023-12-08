@@ -73,10 +73,10 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
 
           if (existingItemIndex !== -1) {
             console.log(
-              "Cart.tsx: Duplicate item found. Adding quantities..."
+              "Cart.tsx: Duplicate item found."
             );
-            let tempCart = [...cart]; // Create a copy of the cart
-            tempCart[existingItemIndex].quantity += quantity;
+            let tempCart = [...cart];
+            tempCart[existingItemIndex].quantity = quantity;
             setCart(tempCart);
           } else {
             console.log(

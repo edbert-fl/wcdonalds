@@ -1,22 +1,31 @@
 import {
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   Text,
   Modal,
   Pressable,
   Image,
   View,
+  TouchableOpacity,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import { cardStyles, cartPage } from "../utils/Styles";
+import React, { useEffect } from "react";
 import { useCart } from "../components/CartContext";
-import { FIRESTORE_DB } from "../../FirebaseConfig";
-import { collection, doc, getDoc } from "firebase/firestore";
 import { CartItem } from "../utils/Interface";
+import { cartStyles } from "../utils/Styles";
+import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../utils/Types";
 
 export const Cart = () => {
   const { cart, setCart, cartVisible, setCartVisible } = useCart();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+
+  const handleEdit = (productID: string) => {
+    console.log("Cart.tsx: Editing product >>>", productID);
+    setCartVisible(false);
+    navigation.navigate('Product Details', { productID: productID });
+};
 
   useEffect(() => {
     function mapDataToProduct(
@@ -46,59 +55,38 @@ export const Cart = () => {
     <SafeAreaView>
       <Modal visible={cartVisible} animationType="slide">
         <Pressable
-          style={cartPage.upper}
+          style={cartStyles.upper}
           onPress={() => {
             setCartVisible(false);
           }}
         ></Pressable>
+        {cart.length === 0 ? (
+            <View style={cartStyles.emptyCartContainer}>
+                <FontAwesome name="shopping-cart" size={50} color="#808080" />
+                <Text style={cartStyles.emptyCartText}>Your cart looks empty...</Text>
+            </View>
+          ) : (
         <ScrollView>
           {cart.map((cartItem) => (
-            <View style={styles.cartItemContainer} key={cartItem.productID}>
-              <Image source={{ uri: cartItem.image }} style={styles.image} />
-              <View style={styles.textContainer}>
-                <Text style={styles.name}>{cartItem.name}</Text>
-                <Text style={styles.quantity}>
+            <View style={cartStyles.cartItemContainer} key={cartItem.productID}>
+              <Image
+                source={{ uri: cartItem.image }}
+                style={cartStyles.image}
+              />
+              <View style={cartStyles.textContainer}>
+                <Text style={cartStyles.name}>{cartItem.name}</Text>
+                <Text style={cartStyles.quantity}>
                   Quantity: {cartItem.quantity}
                 </Text>
               </View>
+              <TouchableOpacity onPress={() => handleEdit(cartItem.productID)}>
+                <Text>Edit</Text>
+              </TouchableOpacity>
             </View>
           ))}
         </ScrollView>
+          )}
       </Modal>
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  cartItemContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-    padding: 10,
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  image: {
-    width: 80,
-    height: 80,
-    marginRight: 10,
-    borderRadius: 4,
-  },
-  textContainer: {
-    flex: 1,
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  quantity: {
-    fontSize: 14,
-    color: "#888",
-  },
-});
