@@ -9,7 +9,7 @@ interface QuantitySelectorProps {
 const QuantitySelector: React.FC<QuantitySelectorProps> = ({ quantity, onQuantityChange }) => {
 
   const handleSubtract = () => {
-    if (quantity > 1) {
+    if (quantity > 0) {
         onQuantityChange(quantity - 1);
     }
   };

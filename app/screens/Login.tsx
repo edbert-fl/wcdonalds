@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, ActivityIndicator, Button, KeyboardAvoidingView } from 'react-native'
+import { View, Text, StyleSheet, TextInput, ActivityIndicator, Button, KeyboardAvoidingView, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
@@ -38,18 +38,39 @@ const Login = () => {
 
     return (
         <View style={loginStyles.container}>
-            <KeyboardAvoidingView behavior='padding'>
-                <TextInput value={email} style={loginStyles.input} placeholder="Email" autoCapitalize="none" onChangeText={(text) => setEmail(text)}></TextInput>
-                <TextInput value={password} style={loginStyles.input} placeholder="password" autoCapitalize="none" secureTextEntry={true} onChangeText={(text) => setPassword(text)}></TextInput>
+            <Text style={loginStyles.logo}>WcDonald's</Text>
+            <KeyboardAvoidingView behavior='padding' style={loginStyles.formContainer}>
+            <TextInput
+                value={email}
+                style={loginStyles.input}
+                placeholder="Email"
+                autoCapitalize="none"
+                onChangeText={(text) => setEmail(text)}
+                enablesReturnKeyAutomatically
+            />
+            <TextInput
+                value={password}
+                style={loginStyles.input}
+                placeholder="Password"
+                autoCapitalize="none"
+                secureTextEntry={true}
+                onChangeText={(text) => setPassword(text)}
+                enablesReturnKeyAutomatically={true}
+            />
 
-                { loading ? (
-                <ActivityIndicator size="large" color={theme.colors.accent} />
-                ) : (
-                <>
-                <Button title="Login" onPress={signIn}/>
-                <Button title="Create account" onPress={signUp}/>
-                </>
-                )}
+            {loading ? (
+                <ActivityIndicator size="large" color={theme.colors.primary} />
+            ) : (
+                <View style={{marginTop: 50}}>
+                    <TouchableOpacity style={loginStyles.button} onPress={signIn}>
+                        <Text style={loginStyles.buttonText}>Login</Text>
+                    </TouchableOpacity>
+                    <View style={{flex: 1}}/>
+                    <TouchableOpacity style={loginStyles.secondaryButton} onPress={signUp}>
+                        <Text style={loginStyles.buttonText}>Create Account</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
             </KeyboardAvoidingView>
         </View>
     )

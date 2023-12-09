@@ -4,31 +4,141 @@ export const theme = {
   colors: {
     primary: '#E53935', 
     accent: '#FFA000', 
-    background: '#ffffff', 
+    background: '#FFFFFF', 
     surface: '#F5F5F5',
     text: '#333333', 
     placeholderText: '#B0BEC5',
     error: '#FF5252',
-    success: '#4CAF50',
+    success: '#3BBD5E',
     warning: '#FFC107',
     divider: '#E0E0E0',
+    buttonText: 'FFFFFF'
   },
 };
 
+export const successStyles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: theme.colors.background,
+      padding: 20,
+      paddingBottom: 120
+    },
+    text: {
+      fontSize: 20,
+      fontWeight: 'bold',
+      marginBottom: 20,
+    },
+    linkText: {
+      color: 'blue',
+      textDecorationLine: 'underline',
+    },
+    button: {
+      backgroundColor: theme.colors.primary,
+      borderRadius: 5,
+      padding: 15,
+      marginTop: 20,
+      width: '100%',
+      alignItems: 'center',
+    },
+    secondaryButton: {
+      backgroundColor: theme.colors.accent,
+      borderRadius: 5,
+      padding: 15,
+      marginTop: 20,
+      width: '100%',
+      alignItems: 'center',
+    },
+    buttonText: {
+      color: 'white',
+      fontSize: 16,
+      fontWeight: 'bold',
+    },
+  })
+
+export const headerStyles = StyleSheet.create({
+  headerCenterContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    width: '100%',
+    flex: 3
+  },
+  backButton: {
+    paddingLeft: 10,
+    marginRight: 'auto',
+    width: '20%',
+    flex: 1
+  },
+  rightButton: {
+    paddingRight: 10,
+    alignItems: 'flex-end',
+    width: '20%'
+  },
+  buttonIcon: {
+    color: 'white',
+    fontSize: 20,
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.colors.primary,
+    paddingTop: 50,
+    padding: 15,
+  },
+  headerText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+})
+
 export const loginStyles = StyleSheet.create({
   container: {
-      marginHorizontal: 20,
-      flex: 1,
-      justifyContent: 'center'
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    backgroundColor: theme.colors.background,
+  },
+  logo: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: theme.colors.primary,
+  },
+  formContainer: {
+    width: '100%',
   },
   input: {
-      marginVertical: 4,
-      height: 50,
-      borderWidth: 1,
-      borderRadius: 4,
-      padding: 10,
-      backgroundColor: '#fff'
-  }
+    marginVertical: 10,
+    height: 50,
+    borderWidth: 1,
+    borderRadius: 4,
+    padding: 10,
+    backgroundColor: theme.colors.surface,
+  },
+  button: {
+    backgroundColor: theme.colors.primary,
+    borderRadius: 5,
+    padding: 15,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  secondaryButton: {
+    backgroundColor: theme.colors.accent,
+    borderRadius: 5,
+    padding: 15,
+    marginTop: 20,
+    width: '100%',
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
 
 export const cardStyles = StyleSheet.create({
@@ -77,7 +187,8 @@ export const cardStyles = StyleSheet.create({
     },
     productInfoContainer: {
       padding: 20,
-      backgroundColor: theme.colors.background
+      backgroundColor: theme.colors.background,
+      height: '100%'
     },
     productTextContainer: {
       alignItems: 'center'
@@ -85,32 +196,48 @@ export const cardStyles = StyleSheet.create({
   });
 
   export const cartStyles = StyleSheet.create({
-    upper: {
-        height: 120,
-        backgroundColor: '#DDD',
-        opacity: .5
-    },
-    lower: {
+    cart: {
         flex: 1,
         backgroundColor: theme.colors.surface,
         borderCurve: 10
     },
+    cartContainer: {
+      height: '100%',
+      backgroundColor: theme.colors.background
+    },
     cartItemContainer: {
       flexDirection: "row",
       alignItems: "center",
+      justifyContent: "center",
       marginBottom: 10,
       padding: 10,
-      backgroundColor: "#fff",
-      borderRadius: 8,
+      backgroundColor: theme.colors.background,
       shadowColor: "#000",
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
       elevation: 5,
     },
+    quantityCard: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      margin: 10,
+      marginRight: 15,
+      padding: 10,
+      width: 40,
+      height: 40,
+      backgroundColor: "#fff",
+      borderRadius: 6,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 1.84,
+      elevation: 5,
+    },
     image: {
-      width: 80,
-      height: 80,
+      width: 60,
+      height: 60,
       marginRight: 10,
       borderRadius: 4,
     },
@@ -130,10 +257,63 @@ export const cardStyles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
+      paddingBottom: '30%'
     },
     emptyCartText: {
       fontSize: 18,
       marginTop: 10,
-      color: '#808080',
+      color: theme.colors.placeholderText,
     },
+    button: {
+      backgroundColor: theme.colors.success, 
+      marginTop: 15,
+      width: '100%',
+      padding: 10,
+      borderRadius: 8,
+      alignItems: "center",
+    },
+    removeButton: {
+      backgroundColor: theme.colors.warning, // Green color, you can change it to match your theme
+      marginTop: 15,
+      width: '100%',
+      padding: 10,
+      borderRadius: 8,
+      alignItems: "center",
+    },
+    buttonText: {
+      color: "white",
+      fontSize: 16,
+      fontWeight: "bold",
+    },
+    price: {
+      fontSize: 14,
+      color: theme.colors.text,
+      marginRight: 10
+    },
+    cartFooter: {
+      alignItems: "center",
+      padding: 15,
+      paddingLeft: 30,
+      paddingRight: 30,
+      width: '100%',
+      backgroundColor: theme.colors.background,
+      shadowColor: "#000",
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 1.84,
+      elevation: 5,
+    },
+    totalPriceContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      width: '100%'
+    },
+    totalText: {
+      fontSize: 16
+    },
+    totalPrice: {
+      fontSize: 24,
+      fontWeight: '600'
+    }
   });

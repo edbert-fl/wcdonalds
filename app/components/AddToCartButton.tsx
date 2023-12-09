@@ -1,9 +1,13 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import { useCart } from "./CartContext";
 import { collection, doc, getDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { CartItem } from "../utils/Interface";
+import { cartStyles } from "../utils/Styles";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../utils/Types";
 
 interface AddToCartButtonProps {
   productID: string;
@@ -15,6 +19,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   quantity,
 }) => {
   const { cart, setCart } = useCart();
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   function mapDataToProduct(
     productID: string,
@@ -73,16 +78,31 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
 
           if (existingItemIndex !== -1) {
             console.log(
-              "Cart.tsx: Duplicate item found."
+              "AddToCartButton.tsx: Duplicate item found."
             );
-            let tempCart = [...cart];
-            tempCart[existingItemIndex].quantity = quantity;
-            setCart(tempCart);
+            if (quantity === 0) {
+              console.log(
+                "AddToCartButton.tsx: Removing item..."
+              );
+              let tempCart = [...cart];
+              tempCart = tempCart.filter((_, index) => index !== existingItemIndex);
+              setCart(tempCart);
+              navigation.navigate('Success', { successText: "Item removed from cart."});
+            } else {
+              console.log(
+                "AddToCartButton.tsx: Updating item quantity..."
+              );
+              let tempCart = [...cart];
+              tempCart[existingItemIndex].quantity = quantity;
+              setCart(tempCart);
+              navigation.navigate('Success', { successText: "Item quantity updated!" });
+            }
           } else {
             console.log(
-              "Cart.tsx: No duplicate item found. Adding item to cart..."
+              "AddToCartButton.tsx: No duplicate item found. Adding item to cart..."
             );
             setCart((prevCart) => [...prevCart, fetchedProduct]);
+            navigation.navigate('Success');
           }
         } else {
           console.error("Product not found or fetch failed.");
@@ -94,27 +114,16 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   }
 
   return (
-    <TouchableOpacity
-      style={styles.button}
-      onPress={() => handleAddToCart(productID, quantity)}
-    >
-      <Text style={styles.buttonText}>Add to Cart</Text>
-    </TouchableOpacity>
+    quantity === 0 ? (
+      <TouchableOpacity style={cartStyles.removeButton} onPress={() => handleAddToCart(productID, quantity)}>
+        <Text style={cartStyles.buttonText}>Remove from Cart</Text>
+      </TouchableOpacity>
+    ) : (
+      <TouchableOpacity style={cartStyles.button} onPress={() => handleAddToCart(productID, quantity)}>
+        <Text style={cartStyles.buttonText}>Add to Cart</Text>
+      </TouchableOpacity>
+    )
   );
 };
-
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: "#4CAF50", // Green color, you can change it to match your theme
-    padding: 10,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-});
 
 export default AddToCartButton;

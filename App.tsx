@@ -13,6 +13,11 @@ import CartButton from "./app/components/CartButton";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CartContext } from "./app/components/CartContext";
 import { CartItem } from "./app/utils/Interface";
+import { View } from "react-native";
+import AppHeader from "./app/components/AppHeader";
+import Icon from 'react-native-vector-icons/MaterialIcons'
+import { headerStyles, theme } from "./app/utils/Styles";
+import AddToCartSuccess from "./app/screens/AddToCartSuccess";
 
 const Stack = createNativeStackNavigator();
 
@@ -37,21 +42,32 @@ export default function App() {
               <Stack.Screen
                 name="All Products"
                 options={{
-                  headerRight: () => <CartButton />,
+                  headerShown: false
                 }}
               >
                 {() => (
-                  <SafeAreaView>
+                  <View>
+                    <AppHeader 
+                      title="All Products"
+                      onRightPress={() => setCartVisible(true)}
+                      onRightIcon={<Icon name="shopping-cart" size={25} color="#FFFFFF" />}
+                    />
                     <Cart />
                     <ProductPage />
-                  </SafeAreaView>
+                  </View>
                 )}
               </Stack.Screen>
 
               <Stack.Screen
                 name="Product Details"
                 component={ProductDetails}
-                options={{ headerShown: true }}
+                options={{ headerShown: false }}
+              />
+
+              <Stack.Screen
+                name="Success"
+                component={AddToCartSuccess}
+                options={{ headerShown: false }}
               />
             </>
           ) : (
