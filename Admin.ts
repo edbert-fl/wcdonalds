@@ -2,8 +2,8 @@ const adminList = [
     "6JMCRv1KnggQWhYxIzBvnV3rHsn1"
 ]
 
-export function checkAdmin(uid: string) {
-    if (uid in adminList) {
+export function isAdmin(uid: string) {
+    if (adminList.includes(uid)) {
         return true;
     }
     return false;

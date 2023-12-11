@@ -2,7 +2,6 @@ import {
   SafeAreaView,
   ScrollView,
   Text,
-  Modal,
   Pressable,
   Image,
   View,
@@ -11,13 +10,14 @@ import {
 import React, { useEffect } from "react";
 import { useCart } from "../components/CartContext";
 import { CartItem } from "../utils/Interface";
-import { cartStyles, headerStyles } from "../utils/Styles";
+import { cartStyles, headerStyles, theme } from "../utils/Styles";
 import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../utils/Types";
-import { Card } from "@rneui/themed";
+import Modal from "react-native-modal";
 import AppHeader from "../components/AppHeader";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 export const Cart = () => {
   const { cart, setCart, cartVisible, setCartVisible } = useCart();
@@ -31,8 +31,8 @@ export const Cart = () => {
 
   function calculateTotaPrice() {
     let sum = 0;
-    for(let index in cart) {
-        sum += (cart[index].price * cart[index].quantity);
+    for (let index in cart) {
+      sum += cart[index].price * cart[index].quantity;
     }
     return sum;
   }
@@ -63,11 +63,21 @@ export const Cart = () => {
 
   return (
     <SafeAreaView>
-      <Modal visible={cartVisible} animationType="slide">
-        <AppHeader 
+      <Modal
+        isVisible={cartVisible}
+        animationIn="slideInUp"
+        animationOut="slideOutDown"
+        coverScreen
+        style={{width: '100%', margin: 0}}
+        hasBackdrop
+        backdropOpacity={1}
+        backdropColor={theme.colors.background}
+      >
+        <AppHeader
           title="Cart"
           onBackPress={() => setCartVisible(false)}
-          onBackIcon="X"/>
+          onBackIcon={<Icon name="arrow-back-ios" size={20} color={theme.colors.buttonText} />}
+        />
         {cart.length === 0 ? (
           <View style={cartStyles.emptyCartContainer}>
             <FontAwesome name="shopping-cart" size={50} color="#808080" />
@@ -77,44 +87,50 @@ export const Cart = () => {
           </View>
         ) : (
           <ScrollView style={cartStyles.cartContainer}>
-            <View style={{height: 30}}/>
+            <View style={{ height: 30 }} />
             {cart.map((cartItem) => (
               <View
                 style={cartStyles.cartItemContainer}
                 key={cartItem.productID}
               >
                 <View style={cartStyles.quantityCard}>
-                    <Text style={cartStyles.quantity}>
-                        {cartItem.quantity}x
-                    </Text>
+                  <Text style={cartStyles.quantity}>{cartItem.quantity}x</Text>
                 </View>
                 <Image
                   source={{ uri: cartItem.image }}
                   style={cartStyles.image}
                 />
                 <View style={cartStyles.textContainer}>
-                    <Text style={cartStyles.name}>{cartItem.name}</Text>
-                    <TouchableOpacity
+                  <Text style={cartStyles.name}>{cartItem.name}</Text>
+                  <TouchableOpacity
                     onPress={() => handleEdit(cartItem.productID)}
-                    >
-                        <Text>Edit</Text>
-                    </TouchableOpacity>
+                  >
+                    <Text>Edit</Text>
+                  </TouchableOpacity>
                 </View>
-                <View> 
-                    <Text style={cartStyles.price}>
-                        ${cartItem.price}
-                    </Text>
+                <View>
+                  <Text style={cartStyles.price}>${cartItem.price}</Text>
                 </View>
               </View>
             ))}
             <View style={cartStyles.cartFooter}>
-                <View style={cartStyles.totalPriceContainer}>
-                    <Text style={cartStyles.totalText}>Total</Text>
-                    <Text style={cartStyles.totalPrice}> ${calculateTotaPrice()}</Text>
-                </View>
-                <TouchableOpacity style={cartStyles.button} onPress={() => {alert("Check out completed!"); setCartVisible(false); navigation.navigate("All Products");}}>
-                    <Text style={cartStyles.buttonText}>Checkout</Text>
-                </TouchableOpacity>
+              <View style={cartStyles.totalPriceContainer}>
+                <Text style={cartStyles.totalText}>Total</Text>
+                <Text style={cartStyles.totalPrice}>
+                  {" "}
+                  ${calculateTotaPrice()}
+                </Text>
+              </View>
+              <TouchableOpacity
+                style={cartStyles.button}
+                onPress={() => {
+                  alert("Check out completed!");
+                  setCartVisible(false);
+                  navigation.navigate("All Products");
+                }}
+              >
+                <Text style={cartStyles.buttonText}>Checkout</Text>
+              </TouchableOpacity>
             </View>
           </ScrollView>
         )}

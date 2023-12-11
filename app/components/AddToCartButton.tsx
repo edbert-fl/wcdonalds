@@ -8,6 +8,7 @@ import { cartStyles } from "../utils/Styles";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../utils/Types";
+import AddToCartAnimation from "./AddToCartAnimation";
 
 interface AddToCartButtonProps {
   productID: string;
@@ -87,7 +88,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
               let tempCart = [...cart];
               tempCart = tempCart.filter((_, index) => index !== existingItemIndex);
               setCart(tempCart);
-              navigation.navigate('Success', { successText: "Item removed from cart."});
+              navigation.navigate('Success', { successText: "Item removed from cart.", includeConfetti: false, animation: null});
             } else {
               console.log(
                 "AddToCartButton.tsx: Updating item quantity..."
@@ -95,14 +96,14 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
               let tempCart = [...cart];
               tempCart[existingItemIndex].quantity = quantity;
               setCart(tempCart);
-              navigation.navigate('Success', { successText: "Item quantity updated!" });
+              navigation.navigate('Success', { successText: "Item quantity updated!", includeConfetti: false, animation: null });
             }
           } else {
             console.log(
               "AddToCartButton.tsx: No duplicate item found. Adding item to cart..."
             );
             setCart((prevCart) => [...prevCart, fetchedProduct]);
-            navigation.navigate('Success');
+            navigation.navigate('Success', { successText: "Item added to cart!", includeConfetti: true, animation: <AddToCartAnimation/> });
           }
         } else {
           console.error("Product not found or fetch failed.");

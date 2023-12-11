@@ -3,13 +3,13 @@ import { View, TouchableOpacity, Text } from 'react-native';
 import LottieView from 'lottie-react-native';
 
 
-const AddToCartAnimation = () => {
+const ConfirmAnimation = () => {
   const animationRef = useRef<LottieView | null>(null);
 
   useEffect(() => {
     if (animationRef.current) {
       animationRef.current.play();
-      console.log("AddToCartAnimation.tsx: Playing animation");
+      console.log("ConfirmAnimation.tsx: Playing animation");
     }
   }, []);
 
@@ -17,7 +17,7 @@ const AddToCartAnimation = () => {
     <View>
       <LottieView
         ref={(animation) => (animationRef.current = animation)}
-        source={require('../../assets/add-to-cart.json')}
+        source={require('../../assets/confirm.json')}
         style={{width:120, height: 100, marginBottom: 80}}
         loop={true}
       />
@@ -25,4 +25,4 @@ const AddToCartAnimation = () => {
   );
 };
 
-export default AddToCartAnimation;
+export default ConfirmAnimation;

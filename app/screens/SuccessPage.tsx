@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useRef } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
@@ -8,15 +8,14 @@ import { successStyles } from '../utils/Styles';
 import { useCart } from '../components/CartContext';
 import AddToCartAnimation from '../components/AddToCartAnimation';
 
+type SuccessPageRouteProp = RouteProp<RootStackParamList, "Success">;
+
 interface AddToCartSuccessProps {
-    successText: string;
+    route: SuccessPageRouteProp;
 }
 
-/**
- *   If successText is none then the default is "Product added to cart!" and it will display the animation. Else not.
- */
-const AddToCartSuccess: React.FC<AddToCartSuccessProps> = ({ successText }) => {
-
+const SuccessPage: React.FC<AddToCartSuccessProps> = ({ route }) => {
+    const { successText, includeConfetti, animation } = route.params;
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     const confettiCannonRef = useRef<any>(null);
     const { setCartVisible } = useCart(); 
@@ -26,25 +25,21 @@ const AddToCartSuccess: React.FC<AddToCartSuccessProps> = ({ successText }) => {
     }
 
     console.log("AddToCartSuccess.tsx: successText >>>", successText)
+    console.log("AddToCartSuccess.tsx: includeConfetti >>>", includeConfetti)
 
     return (
         <View style={successStyles.container}>
-            { successText === undefined ? (
-                <View style={{alignItems: 'center'}}>
-                    <AddToCartAnimation/>
-                    <Text style={successStyles.text}>Product added to cart!</Text>
-                </View>
-            ) : (
-                <Text style={successStyles.text}>{successText}</Text>
-            )}
+            {animation}
+            <Text style={successStyles.text}>{successText}</Text>
             <TouchableOpacity style={successStyles.button} onPress={() => navigation.navigate("All Products")}>
                 <Text style={successStyles.buttonText}>Back to Menu</Text>
             </TouchableOpacity>
             <TouchableOpacity style={successStyles.secondaryButton} onPress={() => {navigation.navigate("All Products"); setCartVisible(true)}}>
                 <Text style={successStyles.buttonText}>Open Cart</Text>
             </TouchableOpacity>
-
-            <ConfettiCannon
+            {
+                includeConfetti === true ? (
+                    <ConfettiCannon
                 ref={confettiCannonRef}
                 count={50}
                 explosionSpeed={30}
@@ -52,8 +47,12 @@ const AddToCartSuccess: React.FC<AddToCartSuccessProps> = ({ successText }) => {
                 fadeOut={true}
                 autoStart={true}
             />
+                ) : (
+                    null
+                )
+            }
         </View>
     );
 };
 
-export default AddToCartSuccess;
+export default SuccessPage;

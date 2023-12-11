@@ -5,20 +5,15 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  SafeAreaView,
-  Modal,
 } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
 import { Card } from "@rneui/themed";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { cardStyles, headerStyles } from "../utils/Styles";
+import { cardStyles } from "../utils/Styles";
 import { RootStackParamList } from "../utils/Types";
 import { Product } from "../utils/Interface";
-import AppHeader from "../components/AppHeader";
-import { useCart } from "../components/CartContext";
-import ConfettiCannon from 'react-native-confetti-cannon';
 
 export const ProductPage: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -47,7 +42,7 @@ export const ProductPage: React.FC = () => {
   }, []);
 
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={{paddingBottom: 120}}>
       <ProductList products={products} navigation={useNavigation()} />
     </ScrollView>
   );

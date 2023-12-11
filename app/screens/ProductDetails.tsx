@@ -18,6 +18,7 @@ import AddToCartButton from "../components/AddToCartButton";
 import { StackNavigationProp } from "@react-navigation/stack";
 import AppHeader from "../components/AppHeader";
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 type ProductDetailsRouteProp = RouteProp<RootStackParamList, "Product Details">;
 
@@ -62,7 +63,7 @@ export const ProductDetails: React.FC<ProductDetailsProps> = ({ route }) => {
       <AppHeader
         title="WcDonald's"
         onBackPress={() => navigation.goBack()}
-        onBackIcon="<"
+        onBackIcon={<Icon name="arrow-back-ios" size={20} color={theme.colors.buttonText} />}
       />
       <KeyboardAvoidingView
         style={productStyles.productInfoContainer}

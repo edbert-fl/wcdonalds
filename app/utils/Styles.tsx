@@ -3,16 +3,16 @@ import { StyleSheet } from "react-native";
 export const theme = {
   colors: {
     primary: '#E53935', 
-    accent: '#FFA000', 
+    accent: '#FFA000',
     background: '#FFFFFF', 
-    surface: '#F5F5F5',
+    surface: '#F9F9F9',
     text: '#333333', 
     placeholderText: '#B0BEC5',
     error: '#FF5252',
     success: '#3BBD5E',
     warning: '#FFC107',
     divider: '#E0E0E0',
-    buttonText: 'FFFFFF'
+    buttonText: '#FFFFFF'
   },
 };
 
@@ -93,53 +93,6 @@ export const headerStyles = StyleSheet.create({
     fontWeight: 'bold',
   },
 })
-
-export const loginStyles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    backgroundColor: theme.colors.background,
-  },
-  logo: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    marginBottom: 20,
-    color: theme.colors.primary,
-  },
-  formContainer: {
-    width: '100%',
-  },
-  input: {
-    marginVertical: 10,
-    height: 50,
-    borderWidth: 1,
-    borderRadius: 4,
-    padding: 10,
-    backgroundColor: theme.colors.surface,
-  },
-  button: {
-    backgroundColor: theme.colors.primary,
-    borderRadius: 5,
-    padding: 15,
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  secondaryButton: {
-    backgroundColor: theme.colors.accent,
-    borderRadius: 5,
-    padding: 15,
-    marginTop: 20,
-    width: '100%',
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-});
 
 export const cardStyles = StyleSheet.create({
     image: {
