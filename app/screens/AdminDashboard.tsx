@@ -19,6 +19,11 @@ const AdminDashboard = () => {
     setAddMenuOpen(false);
   }
 
+  const handleNavigateToNewPromotion = () => {
+    navigation.navigate("Add New Promotion");
+    setAddMenuOpen(false);
+  }
+
   return (
     <View style={{ height: "90%" }}>
       <SpeedDial
@@ -38,7 +43,7 @@ const AdminDashboard = () => {
         <SpeedDial.Action
           icon={<Icon name="local-offer" size={22} color={theme.colors.buttonText} />}
           title="Add Promotion"
-          onPress={() => console.log("Delete Something")}
+          onPress={handleNavigateToNewPromotion}
           color={theme.colors.accent}
         />
       </SpeedDial>

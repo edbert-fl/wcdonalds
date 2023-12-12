@@ -17,7 +17,7 @@ const ConfirmAnimation = () => {
     <View>
       <LottieView
         ref={(animation) => (animationRef.current = animation)}
-        source={require('../../assets/confirm.json')}
+        source={require('../../../assets/confirm.json')}
         style={{width:120, height: 100, marginBottom: 80}}
         loop={true}
       />

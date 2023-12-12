@@ -27,7 +27,6 @@ export const AddressForm: React.FC<AddressFormProps> = ({ addressSheetVisible, s
   }
 
   return (
-    <StripeProvider publishableKey="pk_test_51OLi9NBXTkgpeHauX2lreJTh4jHBZt76XK5CjfdkYAj5c78DVAjfDPdJ65w6S7ZPhr1hxRhPgVRihLDOj4YgOTwd00gTTLqlgf">
       <AddressSheet
         appearance={{
           colors: {
@@ -63,7 +62,6 @@ export const AddressForm: React.FC<AddressFormProps> = ({ addressSheetVisible, s
           closeAddressSheet();
         }}
       />
-    </StripeProvider>
   );
 };
 

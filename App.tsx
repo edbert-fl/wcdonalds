@@ -19,8 +19,8 @@ import { isAdmin } from "./Admin";
 import NavigationMenu from "./app/screens/NavigationMenu";
 import AdminDashboard from "./app/screens/AdminDashboard";
 import AddNewProduct from "./app/screens/AddNewProduct";
-import { Checkout } from "./app/screens/Checkout";
 import { AddressDetails } from "@stripe/stripe-react-native";
+import AddNewPromotion from "./app/screens/AddNewPromotion";
 
 const Stack = createNativeStackNavigator();
 
@@ -170,8 +170,8 @@ export default function App() {
               />
 
               <Stack.Screen
-                name="Checkout"
-                component={Checkout}
+                name="Add New Promotion"
+                component={AddNewPromotion}
                 options={{ headerShown: false }}
               />
             </>

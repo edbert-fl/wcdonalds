@@ -17,7 +17,7 @@ const AddToCartAnimation = () => {
     <View>
       <LottieView
         ref={(animation) => (animationRef.current = animation)}
-        source={require('../../assets/add-to-cart.json')}
+        source={require('../../../assets/add-to-cart.json')}
         style={{width:120, height: 100, marginBottom: 80}}
         loop={true}
       />

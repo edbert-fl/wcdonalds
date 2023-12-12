@@ -7,6 +7,7 @@ export type RootStackParamList = {
     'Checkout': undefined;
     'Success': { successText: string , includeConfetti?: boolean, animation: React.ReactNode};
     'Add New Product': undefined;
+    'Add New Promotion': undefined;
     'Product Details': { productID: string };
     navigation: StackNavigationProp<RootStackParamList, 'All Products'>;
   };

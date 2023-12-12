@@ -8,7 +8,7 @@ import { cartStyles } from "../utils/Styles";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../utils/Types";
-import AddToCartAnimation from "./AddToCartAnimation";
+import AddToCartAnimation from "./animations/AddToCartAnimation";
 
 interface AddToCartButtonProps {
   productID: string;

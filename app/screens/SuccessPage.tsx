@@ -6,7 +6,7 @@ import ConfettiCannon from 'react-native-confetti-cannon';
 import { RootStackParamList } from '../utils/Types';
 import { successStyles } from '../utils/Styles';
 import { useCart } from '../components/CartContext';
-import AddToCartAnimation from '../components/AddToCartAnimation';
+import AddToCartAnimation from '../components/animations/AddToCartAnimation';
 
 type SuccessPageRouteProp = RouteProp<RootStackParamList, "Success">;
 

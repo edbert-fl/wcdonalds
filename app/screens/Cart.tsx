@@ -11,7 +11,6 @@ import React, { useEffect, useState } from "react";
 import { useCart } from "../components/CartContext";
 import { CartItem } from "../utils/Interface";
 import { theme } from "../utils/Styles";
-import { FontAwesome } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../utils/Types";
@@ -19,6 +18,10 @@ import Modal from "react-native-modal";
 import AppHeader from "../components/AppHeader";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import AddressForm from "../components/AddressForm";
+import EmptyCart from "./EmptyCart";
+import AddressCard from "../components/AddressCard";
+import CartItemCard from "../components/CartItemCard";
+import { StripeProvider } from "@stripe/stripe-react-native";
 
 export const Cart = () => {
   const { cart, setCart, address, cartVisible, setCartVisible } = useCart();
@@ -65,6 +68,11 @@ export const Cart = () => {
 
   return (
     <SafeAreaView>
+      <StripeProvider
+        publishableKey="pk_test_51OLi9NBXTkgpeHauX2lreJTh4jHBZt76XK5CjfdkYAj5c78DVAjfDPdJ65w6S7ZPhr1hxRhPgVRihLDOj4YgOTwd00gTTLqlgf"
+        urlScheme="your-url-scheme"
+        merchantIdentifier="merchant.com.{{YOUR_APP_NAME}}" // required for Apple Pay
+      >
       <Modal
         isVisible={cartVisible}
         animationIn="slideInUp"
@@ -81,56 +89,14 @@ export const Cart = () => {
           onBackIcon={<Icon name="arrow-back-ios" size={20} color={theme.colors.buttonText} />}
         />
         {cart.length === 0 ? (
-          <View style={styles.emptyCartContainer}>
-            <FontAwesome name="shopping-cart" size={50} color="#808080" />
-            <Text style={styles.emptyCartText}>
-              Your cart looks empty...
-            </Text>
-          </View>
+          <EmptyCart/>
         ) : (
           <ScrollView style={styles.cartContainer}>
             <View style={{ height: 30 }} />
             <AddressForm addressSheetVisible={addressSheetVisible} setAddressSheetVisible={setAddressSheetVisible}/>
-            <View style={styles.cartItemContainer}>
-              <View style={styles.addressContainer}>
-                <Text style={styles.title}>Address</Text>
-                { address ? (
-                  <Text style={styles.address}>{address.address?.line1}, {address.address?.city}</Text>
-                ) : (
-                  <Text>No address saved</Text>
-                )}
-                
-              </View>
-              <View>
-                <TouchableOpacity onPress={() => setAddressSheetVisible(true)}>
-                  <Text>Edit address</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
+            <AddressCard address={address} setAddressSheetVisible={setAddressSheetVisible}/>
             {cart.map((cartItem) => (
-              <View
-                style={styles.cartItemContainer}
-                key={cartItem.productID}
-              >
-                <View style={styles.quantityCard}>
-                  <Text style={styles.quantity}>{cartItem.quantity}x</Text>
-                </View>
-                <Image
-                  source={{ uri: cartItem.image }}
-                  style={styles.image}
-                />
-                <View style={styles.textContainer}>
-                  <Text style={styles.title}>{cartItem.name}</Text>
-                  <TouchableOpacity
-                    onPress={() => handleEdit(cartItem.productID)}
-                  >
-                    <Text>Edit</Text>
-                  </TouchableOpacity>
-                </View>
-                <View>
-                  <Text style={styles.price}>${cartItem.price}</Text>
-                </View>
-              </View>
+              <CartItemCard cartItem={cartItem} handleEdit={handleEdit}/>
             ))}
             <View style={styles.cartFooter}>
               <View style={styles.totalPriceContainer}>
@@ -143,7 +109,7 @@ export const Cart = () => {
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
-                  navigation.navigate('Checkout');
+                  alert("Checkout completed!")
                 }}
               >
                 <Text style={styles.buttonText}>Checkout</Text>
@@ -152,6 +118,7 @@ export const Cart = () => {
           </ScrollView>
         )}
       </Modal>
+      </StripeProvider>
     </SafeAreaView>
   );
 };
@@ -165,65 +132,6 @@ export const styles = StyleSheet.create({
   cartContainer: {
     height: '100%',
     backgroundColor: theme.colors.background
-  },
-  cartItemContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 10,
-    padding: 10,
-    backgroundColor: theme.colors.background,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  quantityCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    margin: 10,
-    marginRight: 15,
-    padding: 10,
-    width: 40,
-    height: 40,
-    backgroundColor: "#fff",
-    borderRadius: 6,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 1.84,
-    elevation: 5,
-  },
-  image: {
-    width: 60,
-    height: 60,
-    marginRight: 10,
-    borderRadius: 4,
-  },
-  textContainer: {
-    flex: 1,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  quantity: {
-    fontSize: 14,
-    color: "#888",
-  },
-  emptyCartContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingBottom: '30%'
-  },
-  emptyCartText: {
-    fontSize: 18,
-    marginTop: 10,
-    color: theme.colors.placeholderText,
   },
   button: {
     backgroundColor: theme.colors.success, 
@@ -245,16 +153,6 @@ export const styles = StyleSheet.create({
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
-  },
-  address: {
-    fontSize: 14,
-    color: theme.colors.text,
-    marginRight: 10
-  },
-  price: {
-    fontSize: 14,
-    color: theme.colors.text,
-    marginRight: 10
   },
   cartFooter: {
     alignItems: "center",
@@ -282,8 +180,4 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: '600'
   },
-  addressContainer: {
-    flex: 1,
-    marginLeft: 15
-  }
 });
