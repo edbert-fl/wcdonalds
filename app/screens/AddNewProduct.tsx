@@ -17,7 +17,7 @@ import { theme } from "../utils/Styles";
 import { SelectList } from "react-native-dropdown-select-list";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
-import ConfirmAnimation from "../components/confirmAnimation";
+import ConfirmAnimation from "../components/ConfirmAnimation";
 
 const AddNewProduct = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();

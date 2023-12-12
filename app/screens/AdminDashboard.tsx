@@ -1,10 +1,6 @@
-import AppHeader from "../components/AppHeader";
 import {
   View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Animated,
+  StyleSheet
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";

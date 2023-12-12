@@ -19,12 +19,15 @@ import { isAdmin } from "./Admin";
 import NavigationMenu from "./app/screens/NavigationMenu";
 import AdminDashboard from "./app/screens/AdminDashboard";
 import AddNewProduct from "./app/screens/AddNewProduct";
+import { Checkout } from "./app/screens/Checkout";
+import { AddressDetails } from "@stripe/stripe-react-native";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [address, setAddress] = useState<AddressDetails>({});
   const [cartVisible, setCartVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
@@ -81,7 +84,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <CartContext.Provider
-        value={{ cart, setCart, cartVisible, setCartVisible }}
+        value={{ cart, setCart, address, setAddress, cartVisible, setCartVisible }}
       >
         <Stack.Navigator initialRouteName="All Products">
           {user != null ? (
@@ -163,6 +166,12 @@ export default function App() {
               <Stack.Screen
                 name="Add New Product"
                 component={AddNewProduct}
+                options={{ headerShown: false }}
+              />
+
+              <Stack.Screen
+                name="Checkout"
+                component={Checkout}
                 options={{ headerShown: false }}
               />
             </>
