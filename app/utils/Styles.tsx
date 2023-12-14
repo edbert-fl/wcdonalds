@@ -6,13 +6,14 @@ export const theme = {
     accent: '#FFA000',
     background: '#FFFFFF', 
     surface: '#F9F9F9',
-    text: '#333333', 
+    text: '#555555', 
     placeholderText: '#B0BEC5',
     error: '#FF5252',
     success: '#3BBD5E',
     warning: '#FFC107',
     divider: '#E0E0E0',
-    buttonText: '#FFFFFF'
+    buttonText: '#FFFFFF',
+    search: '#EAEAEA',
   },
 };
 
@@ -93,30 +94,6 @@ export const headerStyles = StyleSheet.create({
     fontWeight: 'bold',
   },
 })
-
-export const cardStyles = StyleSheet.create({
-    image: {
-      width: "100%",
-      height: 200,
-      borderTopLeftRadius: 8,
-      borderBottomLeftRadius: 8,
-    },
-    name: {
-      fontSize: 18,
-      fontWeight: "bold",
-      marginBottom: 4,
-    },
-    description: {
-      fontSize: 14,
-      color: theme.colors.text,
-      marginBottom: 4,
-    },
-    price: {
-      fontSize: 16,
-      fontWeight: "bold",
-      color: theme.colors.primary,
-    },
-  });
 
   export const productStyles = StyleSheet.create({
     image: {

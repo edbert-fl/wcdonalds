@@ -1,7 +1,7 @@
-import { NavigationContainer, useNavigation } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./app/screens/Login";
-import { User, onAuthStateChanged, signOut } from "firebase/auth";
+import { User, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { FIREBASE_AUTH } from "./FirebaseConfig";
 
@@ -21,6 +21,8 @@ import AdminDashboard from "./app/screens/AdminDashboard";
 import AddNewProduct from "./app/screens/AddNewProduct";
 import { AddressDetails } from "@stripe/stripe-react-native";
 import AddNewPromotion from "./app/screens/AddNewPromotion";
+import Home from "./app/screens/Home";
+import { CategoryPage } from "./app/screens/CategoryPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -36,7 +38,6 @@ export default function App() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (authUser) => {
-      console.log(authUser);
       if (signingOut) {
         FIREBASE_AUTH.signOut()
           .then(() => {
@@ -49,7 +50,7 @@ export default function App() {
             setSigningOut(false);
           });
       } else {
-        // Sets menu to be invisible and waits for menu to be disabled before setting user.
+        // Sets menu to be invisible and waits for menu to be disabled before setting user so that the page below menu can be switched out.
         setMenuVisible(false);
         delayedSetUserTimeout = setTimeout(() => {
           setUser(authUser);
@@ -84,11 +85,47 @@ export default function App() {
   return (
     <NavigationContainer>
       <CartContext.Provider
-        value={{ cart, setCart, address, setAddress, cartVisible, setCartVisible }}
+        value={{
+          cart,
+          setCart,
+          address,
+          setAddress,
+          cartVisible,
+          setCartVisible,
+        }}
       >
-        <Stack.Navigator initialRouteName="All Products">
+        <Stack.Navigator initialRouteName="Home">
           {user != null ? (
             <>
+              <Stack.Screen
+                name="Home"
+                options={{ headerShown: false }}
+              >
+                {() => (
+                  <View>
+                    <NavigationMenu
+                      admin={isAdmin(user.uid)}
+                      handleSignOut={handleSignOut}
+                      menuVisible={menuVisible}
+                      setMenuVisible={(menuVisible) =>
+                        setMenuVisible(menuVisible)
+                      }
+                    />
+                    <AppHeader
+                      title="WcDonalds"
+                      onBackIcon={
+                        <Icon name="menu" size={25} color="#FFFFFF" />
+                      }
+                      onBackPress={() => handleOpenMenu()}
+                      onRightPress={() => handleOpenCart()}
+                      onRightIcon={
+                        <Icon name="shopping-cart" size={25} color="#FFFFFF" />
+                      }
+                    />
+                    <Home />
+                  </View>
+                )}
+              </Stack.Screen>
               <Stack.Screen
                 name="All Products"
                 options={{
@@ -136,6 +173,44 @@ export default function App() {
               />
 
               <Stack.Screen
+                name="Category"
+                options={{ headerShown: false }}
+              >
+                {() => (
+                <View>
+                  <View>
+                    <NavigationMenu
+                      admin={isAdmin(user.uid)}
+                      handleSignOut={handleSignOut}
+                      menuVisible={menuVisible}
+                      setMenuVisible={(menuVisible) =>
+                        setMenuVisible(menuVisible)
+                      }
+                    />
+                    <AppHeader
+                      title="Category"
+                      onBackIcon={
+                        <Icon name="menu" size={25} color="#FFFFFF" />
+                      }
+                      onBackPress={() => handleOpenMenu()}
+                      onRightPress={() => handleOpenCart()}
+                      onRightIcon={
+                        <Icon
+                          name="shopping-cart"
+                          size={25}
+                          color="#FFFFFF"
+                        />
+                      }
+                    />
+                  </View>
+
+                  <Cart />
+                  <CategoryPage />
+                </View>
+              )}
+              </Stack.Screen>      
+
+              <Stack.Screen
                 name="Success"
                 component={SuccessPage}
                 options={{ headerShown: false }}
@@ -148,17 +223,23 @@ export default function App() {
                       admin={true}
                       handleSignOut={handleSignOut}
                       menuVisible={menuVisible}
-                      setMenuVisible={(menuVisible) => setMenuVisible(menuVisible)}
-                      />
+                      setMenuVisible={(menuVisible) =>
+                        setMenuVisible(menuVisible)
+                      }
+                    />
                     <AppHeader
                       title="Admin Dashboard"
-                      onBackIcon={<Icon name="menu" size={25} color="#FFFFFF" />}
+                      onBackIcon={
+                        <Icon name="menu" size={25} color="#FFFFFF" />
+                      }
                       onBackPress={() => handleOpenMenu()}
                       onRightPress={() => handleOpenCart()}
-                      onRightIcon={<Icon name="shopping-cart" size={25} color="#FFFFFF" />}
+                      onRightIcon={
+                        <Icon name="shopping-cart" size={25} color="#FFFFFF" />
+                      }
                     />
                     <Cart />
-                    <AdminDashboard/>
+                    <AdminDashboard />
                   </View>
                 )}
               </Stack.Screen>

@@ -1,20 +1,28 @@
-import { useEffect, useState } from "react";
-import {
-  ScrollView,
-  View,
-  StyleSheet
-} from "react-native";
+import { StyleSheet } from "react-native";
+import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { Product } from "../utils/Interface";
 import { theme } from "../utils/Styles";
-import { SearchBar } from "react-native-elements";
 import ProductList from "../components/ProductList";
+import Modal from "react-native-modal";
 
-export const ProductPage = () => {
+interface SearchPageProps {
+  visible: boolean;
+  setVisible: (visible: boolean) => void;
+  search: string;
+  setSearch: (search: string) => void;
+}
+
+const SearchPage: React.FC<SearchPageProps> = ({
+  visible,
+  setVisible,
+  search,
+  setSearch,
+}) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [search, setSearch] = useState("");
+  const [searchComplete, setSearchComplete] = useState(false);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -40,9 +48,19 @@ export const ProductPage = () => {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    if (searchComplete) {
+      setVisible(false);
+    }
+  }, [searchComplete]);
+
+  useEffect(() => {
+    updateSearch(search);
+  }, [search]);
+
   const updateSearch = (text: string) => {
     if (text.valueOf() === "") {
-      setFilteredProducts(products);
+      setFilteredProducts([]);
     } else {
       const filtered = products.filter((product) =>
         product.name.toLowerCase().includes(search.toLowerCase())
@@ -54,31 +72,32 @@ export const ProductPage = () => {
   };
 
   return (
-    <View style={styles.background}>
-      <View style={{ padding: 5 }}>
-        <SearchBar
-          placeholder=""
-          onChangeText={(text: string) => updateSearch(text)}
-          value={search}
-          platform="ios"
-          inputStyle={{backgroundColor: theme.colors.search}}
-          inputContainerStyle={{backgroundColor: theme.colors.search}}
-        />
-      </View>
-      <ScrollView
-        contentContainerStyle={{ paddingBottom: 120 }}
-        style={{ backgroundColor: theme.colors.background }}
-      >
-        <ProductList products={filteredProducts} showError/>
-      </ScrollView>
-    </View>
+    <Modal
+      style={styles.cart}
+      isVisible={visible}
+      animationIn="fadeIn"
+      animationOut="fadeOut"
+      hasBackdrop={false}
+      coverScreen={false}
+    >
+      <ProductList
+        products={filteredProducts}
+        showError={false}
+        setSearchComplete={setSearchComplete}
+      />
+    </Modal>
   );
-}
+};
+
+export default SearchPage;
 
 const styles = StyleSheet.create({
-  background: {
-    backgroundColor: theme.colors.background,
-    height: '100%',
-    width: '100%'
+  cart: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    backgroundColor: theme.colors.surface,
+    width: "100%",
+    margin: 0,
+    marginTop: 75
   },
-})
+});

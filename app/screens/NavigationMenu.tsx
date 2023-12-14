@@ -34,6 +34,11 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({
   };
 
   const navigateHome = () => {
+    navigation.navigate("Home");
+    closeMenu();
+  }
+
+  const navigateToMenu = () => {
     navigation.navigate("All Products");
     closeMenu();
   }
@@ -67,6 +72,11 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({
                 onPress={navigateHome}
               >
                 <Text style={styles.menuItem}>Home</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={navigateToMenu}
+              >
+                <Text style={styles.menuItem}>Our Menu</Text>
               </TouchableOpacity>
 
               { admin ? (

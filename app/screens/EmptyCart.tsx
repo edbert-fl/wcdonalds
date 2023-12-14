@@ -6,11 +6,11 @@ import { FontAwesome } from "@expo/vector-icons";
 export const EmptyCart = () => {
   return (
     <View style={styles.emptyCartContainer}>
-            <FontAwesome name="shopping-cart" size={50} color="#808080" />
-            <Text style={styles.emptyCartText}>
-              Your cart looks empty...
-            </Text>
-          </View>
+        <FontAwesome name="shopping-cart" size={50} color="#808080" />
+        <Text style={styles.emptyCartText}>
+            Your cart looks empty...
+        </Text>
+    </View>
   )
 }
 

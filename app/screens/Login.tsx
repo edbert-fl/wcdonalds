@@ -11,13 +11,12 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
-    const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
     const signIn = async () => {
         setLoading(true);
         try {
             const response = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
-            console.log("Login.tsx: Successfully logged in");
+            console.log("Successfully logged in");
         } catch (error: any) {
             console.log(error);
             alert('Sign in failed: ' + error.message);
@@ -30,7 +29,7 @@ const Login = () => {
         setLoading(true);
         try {
             const response = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
-            console.log("Login.tsx: Successfully created new user");
+            console.log("Successfully created new user");
         } catch (error: any) {
             console.log(error);
             alert('Sign up failed: ' + error.message)
@@ -43,6 +42,7 @@ const Login = () => {
         setLoading(true);
         try {
             const response = await signInAnonymously(FIREBASE_AUTH)
+            console.log("Successfully logged in as guest")
         } catch (error: any) {
             console.log(error);
             alert('Guest login failed failed: ' + error.message)

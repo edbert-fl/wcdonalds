@@ -56,7 +56,6 @@ const AddNewProduct = () => {
   
   const handleAddProduct = async () => {
     try {
-
         const newProduct = {
             category: category,
             description: description,
