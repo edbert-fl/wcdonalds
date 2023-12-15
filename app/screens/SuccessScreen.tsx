@@ -3,9 +3,9 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import React, { useRef } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import ConfettiCannon from 'react-native-confetti-cannon';
-import { RootStackParamList } from '../utils/Types';
-import { successStyles } from '../utils/Styles';
-import { useCart } from '../components/CartContext';
+import { RootStackParamList } from '../utils/TypesUtils';
+import { successStyles } from '../utils/StylesUtils';
+import { useAppContext } from '../components/AppContext';
 import AddToCartAnimation from '../components/animations/AddToCartAnimation';
 
 type SuccessPageRouteProp = RouteProp<RootStackParamList, "Success">;
@@ -14,11 +14,11 @@ interface AddToCartSuccessProps {
     route: SuccessPageRouteProp;
 }
 
-const SuccessPage: React.FC<AddToCartSuccessProps> = ({ route }) => {
+const SuccessScreen: React.FC<AddToCartSuccessProps> = ({ route }) => {
     const { successText, includeConfetti, animation } = route.params;
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
     const confettiCannonRef = useRef<any>(null);
-    const { setCartVisible } = useCart(); 
+    const { setCartVisible } = useAppContext(); 
 
     if (confettiCannonRef.current) {
         confettiCannonRef.current.start();
@@ -31,10 +31,10 @@ const SuccessPage: React.FC<AddToCartSuccessProps> = ({ route }) => {
         <View style={successStyles.container}>
             {animation}
             <Text style={successStyles.text}>{successText}</Text>
-            <TouchableOpacity style={successStyles.button} onPress={() => navigation.navigate("All Products")}>
+            <TouchableOpacity style={successStyles.button} onPress={() => navigation.navigate("AllProducts")}>
                 <Text style={successStyles.buttonText}>Back to Menu</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={successStyles.secondaryButton} onPress={() => {navigation.navigate("All Products"); setCartVisible(true)}}>
+            <TouchableOpacity style={successStyles.secondaryButton} onPress={() => {navigation.navigate("AllProducts"); setCartVisible(true)}}>
                 <Text style={successStyles.buttonText}>Open Cart</Text>
             </TouchableOpacity>
             {
@@ -55,4 +55,4 @@ const SuccessPage: React.FC<AddToCartSuccessProps> = ({ route }) => {
     );
 };
 
-export default SuccessPage;
+export default SuccessScreen;

@@ -4,9 +4,9 @@ import { useState, useEffect } from "react";
 import { View, TouchableOpacity, StyleSheet, Text, Image } from "react-native";
 import { Icon } from "react-native-elements";
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
-import { Product } from "../utils/Interface";
-import { theme } from "../utils/Styles";
-import { RootStackParamList } from "../utils/Types";
+import { Product } from "../utils/InterfaceUtils";
+import { theme } from "../utils/StylesUtils";
+import { RootStackParamList } from "../utils/TypesUtils";
 import { Card } from "@rneui/themed";
 
 interface ProductListProps {
@@ -38,7 +38,7 @@ interface ProductListProps {
         setSearchComplete(true);
         console.log("Search Completed")
       }
-      navigation.navigate("Product Details", { productID });
+      navigation.navigate("ProductDetails", { productID });
     };
   
     const shortenDescription = (description: string) => {

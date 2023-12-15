@@ -2,8 +2,8 @@ import { StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
-import { Product } from "../utils/Interface";
-import { theme } from "../utils/Styles";
+import { Product } from "../utils/InterfaceUtils";
+import { theme } from "../utils/StylesUtils";
 import ProductList from "../components/ProductList";
 import Modal from "react-native-modal";
 
@@ -14,7 +14,7 @@ interface SearchPageProps {
   setSearch: (search: string) => void;
 }
 
-const SearchPage: React.FC<SearchPageProps> = ({
+const SearchScreen: React.FC<SearchPageProps> = ({
   visible,
   setVisible,
   search,
@@ -89,7 +89,7 @@ const SearchPage: React.FC<SearchPageProps> = ({
   );
 };
 
-export default SearchPage;
+export default SearchScreen;
 
 const styles = StyleSheet.create({
   cart: {

@@ -3,21 +3,21 @@ import React, { useEffect } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../utils/Types";
+import { RootStackParamList } from "../utils/TypesUtils";
 import { User, signOut } from "firebase/auth";
 import { FIREBASE_AUTH } from "../../FirebaseConfig";
 import Modal from "react-native-modal";
-import { theme } from "../utils/Styles";
+import { theme } from "../utils/StylesUtils";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 interface NavigationMenuProps {
   admin: boolean;
   menuVisible: boolean;
   setMenuVisible: (menuVisible: boolean) => void;
-  handleSignOut: () => {};
+  handleSignOut: () => void;
 }
 
-const NavigationMenu: React.FC<NavigationMenuProps> = ({
+const NavigationScreen: React.FC<NavigationMenuProps> = ({
   admin,
   menuVisible,
   setMenuVisible,
@@ -39,7 +39,7 @@ const NavigationMenu: React.FC<NavigationMenuProps> = ({
   }
 
   const navigateToMenu = () => {
-    navigation.navigate("All Products");
+    navigation.navigate("AllProducts");
     closeMenu();
   }
 
@@ -134,4 +134,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NavigationMenu;
+export default NavigationScreen;

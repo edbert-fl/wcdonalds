@@ -2,12 +2,12 @@ import { View, Text, StyleSheet, TextInput, ActivityIndicator, Button, KeyboardA
 import React, { useState } from 'react'
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
 import { createUserWithEmailAndPassword, signInAnonymously, signInWithEmailAndPassword } from 'firebase/auth';
-import { theme } from './../utils/Styles'
+import { theme } from '../utils/StylesUtils'
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../utils/Types';
+import { RootStackParamList } from '../utils/TypesUtils';
 
-const Login = () => {
+const LoginScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
@@ -149,4 +149,4 @@ export const styles = StyleSheet.create({
     },
   });
 
-export default Login
+export default LoginScreen

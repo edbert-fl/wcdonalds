@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
-import { theme } from '../utils/Styles';
+import { theme } from '../utils/StylesUtils';
 
 interface FormErrorMessageProps {
     visible: boolean;

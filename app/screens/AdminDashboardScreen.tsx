@@ -5,27 +5,29 @@ import {
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../utils/Types";
+import { RootStackParamList } from "../utils/TypesUtils";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { theme } from "../utils/Styles";
+import { theme } from "../utils/StylesUtils";
 import { SpeedDial } from "@rneui/themed";
+import { MainHeader } from "../components/MainHeader";
 
-const AdminDashboard = () => {
+const AdminDashboardScreen = () => {
   const [addMenuOpen, setAddMenuOpen] = useState(false);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const handleNavigateToNewProduct = () => {
-    navigation.navigate("Add New Product");
+    navigation.navigate("AddNewProduct");
     setAddMenuOpen(false);
   }
 
   const handleNavigateToNewPromotion = () => {
-    navigation.navigate("Add New Promotion");
+    navigation.navigate("AddNewPromotion");
     setAddMenuOpen(false);
   }
 
   return (
-    <View style={{ height: "90%" }}>
+    <View style={styles.background}>
+      <MainHeader title="Admin Dashboard"/>
       <SpeedDial
         isOpen={addMenuOpen}
         icon={{ name: "add", color: "#fff" }}
@@ -52,6 +54,9 @@ const AdminDashboard = () => {
 };
 
 const styles = StyleSheet.create({
+  background: {
+    height: '100%'
+  }
 });
 
-export default AdminDashboard;
+export default AdminDashboardScreen;

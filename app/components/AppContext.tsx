@@ -1,28 +1,44 @@
-import { Dispatch, SetStateAction, createContext, useContext } from 'react';
-import { CartItem } from '../utils/Interface';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../utils/Types';
+import { Dispatch, SetStateAction, createContext, useContext } from "react";
+import { CartItem } from "../utils/InterfaceUtils";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { RootStackParamList } from "../utils/TypesUtils";
+import { AddressDetails } from "@stripe/stripe-react-native";
+import { User } from "firebase/auth";
 
 interface AppContextProps {
-    navigation: StackNavigationProp<RootStackParamList, 'All Products'>;
-    cart: CartItem[];
-    setCart: Dispatch<SetStateAction<CartItem[]>>;
-    cartVisible: boolean;
-    setCartVisible: Dispatch<SetStateAction<boolean>>;
+  cart: CartItem[];
+  setCart: Dispatch<SetStateAction<CartItem[]>>;
+  cartVisible: boolean;
+  setCartVisible: Dispatch<SetStateAction<boolean>>;
+  address: AddressDetails;
+  setAddress: Dispatch<SetStateAction<AddressDetails>>;
+  authUser: User | null;
+  handleSignOut: () => void;
+  menuVisible: boolean;
+  setMenuVisible: Dispatch<SetStateAction<boolean>>;
+  handleOpenMenu: () => void;
+  handleOpenCart: () => void;
 }
 
-export const AppContext = createContext<AppContextProps | undefined> ({
-    navigation: { navigate: () => {} } as StackNavigationProp<RootStackParamList, 'All Products'>,
-    cart: [],
-    setCart: () => {},
-    cartVisible: false,
-    setCartVisible: () => {}
+export const AppContext = createContext<AppContextProps | undefined>({
+  cart: [],
+  setCart: () => {},
+  cartVisible: false,
+  setCartVisible: () => {},
+  address: {},
+  setAddress: () => {},
+  authUser: null,
+  handleSignOut: () => {},
+  menuVisible: false,
+  setMenuVisible: () => {},
+  handleOpenMenu: () => {},
+  handleOpenCart: () => {},
 });
 
 export const useAppContext = () => {
   const context = useContext(AppContext);
   if (!context) {
-    throw new Error('useCart must be used within a CartProvider');
+    throw new Error("useCart must be used within a CartProvider");
   }
   return context;
 };

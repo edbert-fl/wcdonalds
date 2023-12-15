@@ -9,19 +9,27 @@ import {
   where,
 } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
-import { Product } from "../utils/Interface";
-import { theme } from "../utils/Styles";
+import { Product } from "../utils/InterfaceUtils";
+import { theme } from "../utils/StylesUtils";
 import ProductList from "../components/ProductList";
-import { RouteProp, useRoute } from "@react-navigation/native";
-import { RootStackParamList } from "../utils/Types";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import { RootStackParamList } from "../utils/TypesUtils";
+import { Icon } from "react-native-elements";
+import { isAdmin } from "../../Admin";
+import { useAppContext } from "../components/AppContext";
+import AppHeader from "../components/AppHeader";
+import NavigationScreen from "./NavigationScreen";
+import { CartScreen } from "./CartScreen";
+import { StackNavigationProp } from "@react-navigation/stack";
 
 type CategoryPageRouteProp = RouteProp<RootStackParamList, "Category">;
 
-export const CategoryPage = () => {
+export const CategoryProductsScreen = () => {
   const route = useRoute<CategoryPageRouteProp>();
   const { categoryID } = route.params || {};
 
   const [products, setProducts] = useState<Product[]>([]);
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -57,8 +65,34 @@ export const CategoryPage = () => {
     fetchProducts();
   }, []);
 
+  const {
+    authUser,
+    handleSignOut,
+    menuVisible,
+    setMenuVisible,
+    handleOpenCart,
+  } = useAppContext();
+
+  if (authUser == null) {
+    throw "Error: No user has been logged in!";
+  }
+
   return (
     <View style={styles.background}>
+      <NavigationScreen
+        admin={isAdmin(authUser.uid)}
+        handleSignOut={handleSignOut}
+        menuVisible={menuVisible}
+        setMenuVisible={(menuVisible) => setMenuVisible(menuVisible)}
+      />
+      <AppHeader
+        title="Category"
+        onBackIcon={<Icon name="arrow-back-ios" size={20} color={theme.colors.buttonText} />}
+        onBackPress={() => navigation.goBack()}
+        onRightIcon={<Icon name="shopping-cart" size={25} color="#FFFFFF" />}
+        onRightPress={() => handleOpenCart()}
+      />
+      <CartScreen />
       {categoryID === null ? (
         <View>
           <Text>Error has occured</Text>

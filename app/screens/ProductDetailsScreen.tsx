@@ -1,6 +1,6 @@
 // ProductDetails.tsx
 import { RouteProp, useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "../utils/Types";
+import { RootStackParamList } from "../utils/TypesUtils";
 import {
   Text,
   View,
@@ -11,7 +11,7 @@ import {
 import { doc, getDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import { useEffect, useState } from "react";
-import { productStyles, theme } from "../utils/Styles";
+import { productStyles, theme } from "../utils/StylesUtils";
 import { Divider } from "@rneui/base";
 import QuantitySelector from "../components/QuantitySelector";
 import AddToCartButton from "../components/AddToCartButton";
@@ -20,13 +20,13 @@ import AppHeader from "../components/AppHeader";
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
 import Icon from "react-native-vector-icons/MaterialIcons";
 
-type ProductDetailsRouteProp = RouteProp<RootStackParamList, "Product Details">;
+type ProductDetailsRouteProp = RouteProp<RootStackParamList, "ProductDetails">;
 
 interface ProductDetailsProps {
   route: ProductDetailsRouteProp;
 }
 
-export const ProductDetails: React.FC<ProductDetailsProps> = ({ route }) => {
+export const ProductDetailsScreen: React.FC<ProductDetailsProps> = ({ route }) => {
   const { productID } = route.params;
   const [productData, setProductData] = useState<any>(null);
   const [quantity, setQuantity] = useState(1);

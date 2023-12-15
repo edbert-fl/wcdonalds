@@ -6,7 +6,7 @@ import {
   AddressSheetError,
   AddressDetails,
 } from "@stripe/stripe-react-native";
-import { useCart } from "./CartContext";
+import { useAppContext  } from "./AppContext";
 
 interface AddressFormProps { 
     addressSheetVisible: boolean,
@@ -14,7 +14,7 @@ interface AddressFormProps {
 }
 
 export const AddressForm: React.FC<AddressFormProps> = ({ addressSheetVisible, setAddressSheetVisible}) => {
-  const { address, setAddress } = useCart();
+  const { address, setAddress } = useAppContext();
 
   const closeAddressSheet = () => {
     setAddressSheetVisible(false);

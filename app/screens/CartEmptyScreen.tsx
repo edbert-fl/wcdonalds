@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
-import { theme } from '../utils/Styles'
+import { theme } from '../utils/StylesUtils'
 import { FontAwesome } from "@expo/vector-icons";
 
-export const EmptyCart = () => {
+export const CartEmptyScreen = () => {
   return (
     <View style={styles.emptyCartContainer}>
         <FontAwesome name="shopping-cart" size={50} color="#808080" />
@@ -28,4 +28,4 @@ const styles = StyleSheet.create({
       },
 })
 
-export default EmptyCart
+export default CartEmptyScreen

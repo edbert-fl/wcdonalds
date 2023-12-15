@@ -9,17 +9,17 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "../utils/Types";
+import { RootStackParamList } from "../utils/TypesUtils";
 import { StackNavigationProp } from "@react-navigation/stack";
 import AppHeader from "../components/AppHeader";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { theme } from "../utils/Styles";
+import { theme } from "../utils/StylesUtils";
 import { SelectList } from "react-native-dropdown-select-list";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
 import ConfirmAnimation from "../components/animations/ConfirmAnimation";
 
-const AddNewProduct = () => {
+const AddProductScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
   const [selected, setSelected] = useState("");
   const [productName, setProductName] = useState("");
@@ -216,4 +216,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddNewProduct;
+export default AddProductScreen;

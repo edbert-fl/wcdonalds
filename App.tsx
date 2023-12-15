@@ -1,28 +1,28 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Login from "./app/screens/Login";
+import LoginScreen from "./app/screens/LoginScreen";
 import { User, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { FIREBASE_AUTH } from "./FirebaseConfig";
 
 import React from "react";
-import { ProductPage } from "./app/screens/ProductPage";
-import { ProductDetails } from "./app/screens/ProductDetails";
-import { Cart } from "./app/screens/Cart";
-import { CartContext } from "./app/components/CartContext";
-import { CartItem } from "./app/utils/Interface";
+import { AllProductsScreen } from "./app/screens/AllProductsScreen";
+import { ProductDetailsScreen } from "./app/screens/ProductDetailsScreen";
+import { CartScreen } from "./app/screens/CartScreen";
+import { AppContext } from "./app/components/AppContext";
+import { CartItem } from "./app/utils/InterfaceUtils";
 import { View } from "react-native";
 import AppHeader from "./app/components/AppHeader";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import SuccessPage from "./app/screens/SuccessPage";
+import SuccessScreen from "./app/screens/SuccessScreen";
 import { isAdmin } from "./Admin";
-import NavigationMenu from "./app/screens/NavigationMenu";
-import AdminDashboard from "./app/screens/AdminDashboard";
-import AddNewProduct from "./app/screens/AddNewProduct";
+import NavigationScreen from "./app/screens/NavigationScreen";
+import AdminDashboardScreen from "./app/screens/AdminDashboardScreen";
+import AddProductScreen from "./app/screens/AddProductScreen";
 import { AddressDetails } from "@stripe/stripe-react-native";
-import AddNewPromotion from "./app/screens/AddNewPromotion";
-import Home from "./app/screens/Home";
-import { CategoryPage } from "./app/screens/CategoryPage";
+import AddPromotionScreen from "./app/screens/AddPromotionScreen";
+import HomeScreen from "./app/screens/HomeScreen";
+import { CategoryProductsScreen } from "./app/screens/CategoryProductsScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -84,14 +84,20 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <CartContext.Provider
+      <AppContext.Provider
         value={{
-          cart,
-          setCart,
-          address,
-          setAddress,
-          cartVisible,
-          setCartVisible,
+          cart: cart,
+          setCart: setCart,
+          address: address,
+          setAddress: setAddress,
+          cartVisible: cartVisible,
+          setCartVisible: setCartVisible,
+          authUser: user,
+          handleSignOut: handleSignOut,
+          menuVisible: menuVisible,
+          setMenuVisible: setMenuVisible,
+          handleOpenMenu: handleOpenMenu,
+          handleOpenCart: handleOpenCart,
         }}
       >
         <Stack.Navigator initialRouteName="Home">
@@ -99,172 +105,60 @@ export default function App() {
             <>
               <Stack.Screen
                 name="Home"
+                component={HomeScreen}
                 options={{ headerShown: false }}
-              >
-                {() => (
-                  <View>
-                    <NavigationMenu
-                      admin={isAdmin(user.uid)}
-                      handleSignOut={handleSignOut}
-                      menuVisible={menuVisible}
-                      setMenuVisible={(menuVisible) =>
-                        setMenuVisible(menuVisible)
-                      }
-                    />
-                    <AppHeader
-                      title="WcDonalds"
-                      onBackIcon={
-                        <Icon name="menu" size={25} color="#FFFFFF" />
-                      }
-                      onBackPress={() => handleOpenMenu()}
-                      onRightPress={() => handleOpenCart()}
-                      onRightIcon={
-                        <Icon name="shopping-cart" size={25} color="#FFFFFF" />
-                      }
-                    />
-                    <Home />
-                  </View>
-                )}
-              </Stack.Screen>
+              />
               <Stack.Screen
-                name="All Products"
-                options={{
-                  headerShown: false,
-                }}
-              >
-                {() => (
-                  <View>
-                    <View>
-                      <NavigationMenu
-                        admin={isAdmin(user.uid)}
-                        handleSignOut={handleSignOut}
-                        menuVisible={menuVisible}
-                        setMenuVisible={(menuVisible) =>
-                          setMenuVisible(menuVisible)
-                        }
-                      />
-                      <AppHeader
-                        title="All Products"
-                        onBackIcon={
-                          <Icon name="menu" size={25} color="#FFFFFF" />
-                        }
-                        onBackPress={() => handleOpenMenu()}
-                        onRightPress={() => handleOpenCart()}
-                        onRightIcon={
-                          <Icon
-                            name="shopping-cart"
-                            size={25}
-                            color="#FFFFFF"
-                          />
-                        }
-                      />
-                    </View>
-
-                    <Cart />
-                    <ProductPage />
-                  </View>
-                )}
-              </Stack.Screen>
+                name="AllProducts"
+                component={AllProductsScreen}
+                options={{ headerShown: false }}
+              />
 
               <Stack.Screen
-                name="Product Details"
-                component={ProductDetails}
+                name="ProductDetails"
+                component={ProductDetailsScreen}
                 options={{ headerShown: false }}
               />
 
               <Stack.Screen
                 name="Category"
+                component={CategoryProductsScreen}
                 options={{ headerShown: false }}
-              >
-                {() => (
-                <View>
-                  <View>
-                    <NavigationMenu
-                      admin={isAdmin(user.uid)}
-                      handleSignOut={handleSignOut}
-                      menuVisible={menuVisible}
-                      setMenuVisible={(menuVisible) =>
-                        setMenuVisible(menuVisible)
-                      }
-                    />
-                    <AppHeader
-                      title="Category"
-                      onBackIcon={
-                        <Icon name="menu" size={25} color="#FFFFFF" />
-                      }
-                      onBackPress={() => handleOpenMenu()}
-                      onRightPress={() => handleOpenCart()}
-                      onRightIcon={
-                        <Icon
-                          name="shopping-cart"
-                          size={25}
-                          color="#FFFFFF"
-                        />
-                      }
-                    />
-                  </View>
-
-                  <Cart />
-                  <CategoryPage />
-                </View>
-              )}
-              </Stack.Screen>      
+              />
 
               <Stack.Screen
                 name="Success"
-                component={SuccessPage}
-                options={{ headerShown: false }}
-              />
-
-              <Stack.Screen name="Admin" options={{ headerShown: false }}>
-                {() => (
-                  <View>
-                    <NavigationMenu
-                      admin={true}
-                      handleSignOut={handleSignOut}
-                      menuVisible={menuVisible}
-                      setMenuVisible={(menuVisible) =>
-                        setMenuVisible(menuVisible)
-                      }
-                    />
-                    <AppHeader
-                      title="Admin Dashboard"
-                      onBackIcon={
-                        <Icon name="menu" size={25} color="#FFFFFF" />
-                      }
-                      onBackPress={() => handleOpenMenu()}
-                      onRightPress={() => handleOpenCart()}
-                      onRightIcon={
-                        <Icon name="shopping-cart" size={25} color="#FFFFFF" />
-                      }
-                    />
-                    <Cart />
-                    <AdminDashboard />
-                  </View>
-                )}
-              </Stack.Screen>
-
-              <Stack.Screen
-                name="Add New Product"
-                component={AddNewProduct}
+                component={SuccessScreen}
                 options={{ headerShown: false }}
               />
 
               <Stack.Screen
-                name="Add New Promotion"
-                component={AddNewPromotion}
+                name="Admin"
+                component={AdminDashboardScreen}
+                options={{ headerShown: false }}
+              />
+
+              <Stack.Screen
+                name="AddNewProduct"
+                component={AddProductScreen}
+                options={{ headerShown: false }}
+              />
+
+              <Stack.Screen
+                name="AddNewPromotion"
+                component={AddPromotionScreen}
                 options={{ headerShown: false }}
               />
             </>
           ) : (
             <Stack.Screen
               name="Login"
-              component={Login}
+              component={LoginScreen}
               options={{ headerShown: false }}
             />
           )}
         </Stack.Navigator>
-      </CartContext.Provider>
+      </AppContext.Provider>
     </NavigationContainer>
   );
 }

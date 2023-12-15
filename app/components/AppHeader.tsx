@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity, GestureResponderEvent } from 'react-native'
 import React, { ReactNode } from 'react'
-import { headerStyles } from '../utils/Styles'
+import { headerStyles } from '../utils/StylesUtils'
 import { useNavigation } from '@react-navigation/native';
 
 interface HeaderProps {

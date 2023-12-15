@@ -1,13 +1,13 @@
 import React from "react";
 import { Text, TouchableOpacity } from "react-native";
-import { useCart } from "./CartContext";
+import { useAppContext } from "./AppContext";
 import { collection, doc, getDoc } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
-import { CartItem } from "../utils/Interface";
-import { cartStyles } from "../utils/Styles";
+import { CartItem } from "../utils/InterfaceUtils";
+import { cartStyles } from "../utils/StylesUtils";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../utils/Types";
+import { RootStackParamList } from "../utils/TypesUtils";
 import AddToCartAnimation from "./animations/AddToCartAnimation";
 
 interface AddToCartButtonProps {
@@ -19,7 +19,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
   productID,
   quantity,
 }) => {
-  const { cart, setCart } = useCart();
+  const { cart, setCart } = useAppContext();
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   function mapDataToProduct(

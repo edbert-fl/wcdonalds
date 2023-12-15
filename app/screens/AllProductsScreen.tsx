@@ -6,12 +6,13 @@ import {
 } from "react-native";
 import { collection, getDocs } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
-import { Product } from "../utils/Interface";
-import { theme } from "../utils/Styles";
+import { Product } from "../utils/InterfaceUtils";
+import { theme } from "../utils/StylesUtils";
 import { SearchBar } from "react-native-elements";
 import ProductList from "../components/ProductList";
+import { MainHeader } from "../components/MainHeader";
 
-export const ProductPage = () => {
+export const AllProductsScreen = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
@@ -55,10 +56,11 @@ export const ProductPage = () => {
 
   return (
     <View style={styles.background}>
+      <MainHeader title="Our Menu" />
       <View style={{ padding: 5 }}>
         <SearchBar
           placeholder=""
-          onChangeText={(text: string) => updateSearch(text)}
+          onChangeText={updateSearch}
           value={search}
           platform="ios"
           inputStyle={{backgroundColor: theme.colors.search}}

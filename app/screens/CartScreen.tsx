@@ -8,30 +8,32 @@ import {
   StyleSheet
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useCart } from "../components/CartContext";
-import { CartItem } from "../utils/Interface";
-import { theme } from "../utils/Styles";
+import { useAppContext } from "../components/AppContext";
+import { CartItem } from "../utils/InterfaceUtils";
+import { theme } from "../utils/StylesUtils";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../utils/Types";
+import { RootStackParamList } from "../utils/TypesUtils";
 import Modal from "react-native-modal";
 import AppHeader from "../components/AppHeader";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import AddressForm from "../components/AddressForm";
-import EmptyCart from "./EmptyCart";
+import CartEmptyScreen from "./CartEmptyScreen";
 import AddressCard from "../components/AddressCard";
 import CartItemCard from "../components/CartItemCard";
 import { StripeProvider } from "@stripe/stripe-react-native";
+import NavigationScreen from "./NavigationScreen";
+import { isAdmin } from "../../Admin";
 
-export const Cart = () => {
-  const { cart, setCart, address, cartVisible, setCartVisible } = useCart();
+export const CartScreen = () => {
+  const { cart, setCart, address, cartVisible, setCartVisible } = useAppContext();
   const [addressSheetVisible, setAddressSheetVisible] = useState(false);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const handleEdit = (productID: string) => {
     console.log("Cart.tsx: Editing product >>>", productID);
     setCartVisible(false);
-    navigation.navigate("Product Details", { productID: productID });
+    navigation.navigate("ProductDetails", { productID: productID });
   };
 
   function calculateTotaPrice() {
@@ -67,7 +69,7 @@ export const Cart = () => {
   }, [cart]);
 
   return (
-    <SafeAreaView>
+    <View>
       <StripeProvider
         publishableKey="pk_test_51OLi9NBXTkgpeHauX2lreJTh4jHBZt76XK5CjfdkYAj5c78DVAjfDPdJ65w6S7ZPhr1hxRhPgVRihLDOj4YgOTwd00gTTLqlgf"
         urlScheme="your-url-scheme"
@@ -89,7 +91,7 @@ export const Cart = () => {
           onBackIcon={<Icon name="arrow-back-ios" size={20} color={theme.colors.buttonText} />}
         />
         {cart.length === 0 ? (
-          <EmptyCart/>
+          <CartEmptyScreen/>
         ) : (
           <ScrollView style={styles.cartContainer}>
             <View style={{ height: 30 }} />
@@ -119,7 +121,7 @@ export const Cart = () => {
         )}
       </Modal>
       </StripeProvider>
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -9,11 +9,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { RootStackParamList } from "../utils/Types";
+import { RootStackParamList } from "../utils/TypesUtils";
 import { StackNavigationProp } from "@react-navigation/stack";
 import AppHeader from "../components/AppHeader";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { theme } from "../utils/Styles";
+import { theme } from "../utils/StylesUtils";
 import {
   addDoc,
   collection,
@@ -26,9 +26,9 @@ import { FIRESTORE_DB } from "../../FirebaseConfig";
 import FormErrorMessage from "../components/FormErrorMessage";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
 import ConfirmAnimation from "../components/animations/ConfirmAnimation";
-import { PromotionProduct } from "../utils/Interface";
+import { PromotionProduct } from "../utils/InterfaceUtils";
 
-const AddNewPromotion = () => {
+const AddPromotionScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   // State variables
@@ -407,4 +407,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddNewPromotion;
+export default AddPromotionScreen;

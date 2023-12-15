@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { AddressDetails } from "@stripe/stripe-react-native";
-import { theme } from "../utils/Styles";
+import { theme } from "../utils/StylesUtils";
 
 interface AddressCardProps {
   address: AddressDetails;

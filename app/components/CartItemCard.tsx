@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import React from "react";
-import { CartItem } from "../utils/Interface";
-import { theme } from "../utils/Styles";
+import { CartItem } from "../utils/InterfaceUtils";
+import { theme } from "../utils/StylesUtils";
 
 interface CartItemCardProps {
   cartItem: CartItem;
