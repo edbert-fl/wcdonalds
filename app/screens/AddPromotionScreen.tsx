@@ -95,58 +95,69 @@ const AddPromotionScreen = () => {
   const handleAddPromotion = async () => {
     // Reset form submission error state
     setInvalidFormSubmission(false);
-  
+
     // Validate form fields
     checkIfEmpty(selectedProducts, setInvalidProducts);
     checkIfEmpty(promotionArtURL, setInvalidURL);
     checkIfEmpty(promotionDescription, setInvalidDescription);
     checkIfEmpty(promotionName, setInvalidName);
     checkIfEmpty(rate, setInvalidRate);
-  
+
     // If the form is valid, proceed with adding the promotion
     if (!invalidFormSubmission) {
       try {
         // Add a new promotion and get its ID
         const newPromotionID = await addPromotion();
-  
+
         if (newPromotionID != null) {
           // Reference to the new promotion document
-          const promotionDocReference = doc(FIRESTORE_DB, "promotions", newPromotionID);
-  
+          const promotionDocReference = doc(
+            FIRESTORE_DB,
+            "promotions",
+            newPromotionID
+          );
+
           // Fetch the promotion document snapshot
           const promotionDocSnapshot = await getDoc(promotionDocReference);
-  
+
           // Check if the promotion document exists
           if (promotionDocSnapshot.exists()) {
             // Retrieve the rate from the promotion document
             const rate = promotionDocSnapshot.data().rate;
-  
+
             // Update each selected product with a reference to the new promotion and discounted price
             for (let i in selectedProducts) {
               const productId = selectedProducts[i];
-              const productDocReference = doc(FIRESTORE_DB, "products", productId);
-  
+              const productDocReference = doc(
+                FIRESTORE_DB,
+                "products",
+                productId
+              );
+
               try {
                 // Fetch the product document snapshot
                 const productDocSnapshot = await getDoc(productDocReference);
-  
+
                 // Check if the product document exists
                 if (productDocSnapshot.exists()) {
                   // Retrieve the product price from the document
                   const productPrice = productDocSnapshot.data().price;
-  
+
                   // Calculate the discounted price based on the rate
                   const discountPrice = productPrice * rate;
-  
+
                   // Update the product document with a reference to the new promotion and discounted price
                   await updateDoc(productDocReference, {
                     promotion: promotionDocReference,
                     discountPrice: discountPrice,
                   });
-  
+
                   console.log("Document successfully updated!");
                 } else {
-                  console.log("Error: Could not retrieve product document snapshot for product ID:", productId);
+                  console.log(
+                    "Error: Could not retrieve product document snapshot for product ID:",
+                    productId
+                  );
                 }
               } catch (error) {
                 console.error("Error updating product document:", error);
@@ -159,8 +170,7 @@ const AddPromotionScreen = () => {
       } catch (error) {
         console.error("Error adding promotion:", error);
       }
-    };
-  
+    }
 
     // Navigate to the success screen after adding the promotion
     navigation.navigate("Success", {
@@ -258,17 +268,25 @@ const AddPromotionScreen = () => {
 
           <View style={styles.fieldContainer}>
             <Text style={styles.label}>Products in Promotion</Text>
-            <MultipleSelectList
-              boxStyles={[
-                styles.dropdown,
-                invalidProducts && styles.dropdownError,
-              ]}
-              searchPlaceholder="Search for products"
-              setSelected={(key: any) => setSelectedProducts(key)}
-              onSelect={() => console.log(selectedProducts)}
-              data={data}
-              save="key"
-            />
+            {invalidProducts ? (
+              <MultipleSelectList
+                boxStyles={styles.dropdownError}
+                searchPlaceholder="Search for products"
+                setSelected={(key: any) => setSelectedProducts(key)}
+                onSelect={() => console.log(selectedProducts)}
+                data={data}
+                save="key"
+              />
+            ) : (
+              <MultipleSelectList
+                boxStyles={styles.dropdown}
+                searchPlaceholder="Search for products"
+                setSelected={(key: any) => setSelectedProducts(key)}
+                onSelect={() => console.log(selectedProducts)}
+                data={data}
+                save="key"
+              />
+            )}
             <FormErrorMessage
               visible={invalidURL}
               message={"At least one product needs to be selected!"}

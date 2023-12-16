@@ -1,6 +1,5 @@
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useRoute } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import LoginScreen from "./app/screens/LoginScreen";
 import { User, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { FIREBASE_AUTH } from "./FirebaseConfig";
@@ -8,21 +7,16 @@ import { FIREBASE_AUTH } from "./FirebaseConfig";
 import React from "react";
 import { AllProductsScreen } from "./app/screens/AllProductsScreen";
 import { ProductDetailsScreen } from "./app/screens/ProductDetailsScreen";
-import { CartScreen } from "./app/screens/CartScreen";
 import { AppContext } from "./app/components/AppContext";
 import { CartItem } from "./app/utils/InterfaceUtils";
-import { View } from "react-native";
-import AppHeader from "./app/components/AppHeader";
-import Icon from "react-native-vector-icons/MaterialIcons";
 import SuccessScreen from "./app/screens/SuccessScreen";
-import { isAdmin } from "./Admin";
-import NavigationScreen from "./app/screens/NavigationScreen";
-import AdminDashboardScreen from "./app/screens/AdminDashboardScreen";
 import AddProductScreen from "./app/screens/AddProductScreen";
 import { AddressDetails } from "@stripe/stripe-react-native";
 import AddPromotionScreen from "./app/screens/AddPromotionScreen";
 import HomeScreen from "./app/screens/HomeScreen";
 import { CategoryProductsScreen } from "./app/screens/CategoryProductsScreen";
+import LoginScreen from "./app/screens/LoginScreen";
+import UserProfileScreen from "./app/screens/UserProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -82,6 +76,14 @@ export default function App() {
     setMenuVisible(false);
   };
 
+  const ProductDetailsScreenFC = () => (
+    <ProductDetailsScreen route={useRoute()} />
+  );
+
+  const SuccessScreenFC = () => (
+  <SuccessScreen route={useRoute()} />
+  );
+
   return (
     <NavigationContainer>
       <AppContext.Provider
@@ -116,7 +118,7 @@ export default function App() {
 
               <Stack.Screen
                 name="ProductDetails"
-                component={ProductDetailsScreen}
+                component={ProductDetailsScreenFC}
                 options={{ headerShown: false }}
               />
 
@@ -128,13 +130,7 @@ export default function App() {
 
               <Stack.Screen
                 name="Success"
-                component={SuccessScreen}
-                options={{ headerShown: false }}
-              />
-
-              <Stack.Screen
-                name="Admin"
-                component={AdminDashboardScreen}
+                component={SuccessScreenFC}
                 options={{ headerShown: false }}
               />
 
@@ -147,6 +143,12 @@ export default function App() {
               <Stack.Screen
                 name="AddNewPromotion"
                 component={AddPromotionScreen}
+                options={{ headerShown: false }}
+              />
+
+              <Stack.Screen
+                name="UserProfile"
+                component={UserProfileScreen}
                 options={{ headerShown: false }}
               />
             </>

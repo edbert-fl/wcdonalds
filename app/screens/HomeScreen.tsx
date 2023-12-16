@@ -22,11 +22,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../utils/TypesUtils";
 import { SearchBar } from "react-native-elements";
 import SearchScreen from "./SearchScreen";
-import NavigationScreen from "./NavigationScreen";
-import AppHeader from "../components/AppHeader";
-import { isAdmin } from "../../Admin";
-import { useAppContext } from "../components/AppContext";
-import { CartScreen } from "./CartScreen";
 import { MainHeader } from "../components/MainHeader";
 
 export const HomeScreen: React.FC = () => {
@@ -116,7 +111,12 @@ export const HomeScreen: React.FC = () => {
 
   return (
     <View>
-      <MainHeader title="WcDonald's"/>
+      <MainHeader title="WcDonald's" />
+      {/* { isAdmin(authUser.uid) ? (
+        <AdminButton/>
+      ) : (
+        null
+      )} */}
       <ScrollView contentContainerStyle={styles.background}>
         <SearchBar
           onChangeText={handleSearchChange}
@@ -141,20 +141,29 @@ export const HomeScreen: React.FC = () => {
             alignItems: "center",
           }}
         >
-          {promotionImages.map((promotionImage) => {
-            return (
-              <Image
-                key={promotionImage.id}
-                source={{ uri: promotionImage.art }}
-                style={styles.promotionalArt}
-              />
-            );
-          })}
+          <View style={styles.promotionalArtContainer}>
+            {promotionImages.map((promotionImage) => {
+              return (
+                <Image
+                  key={promotionImage.id}
+                  source={{ uri: promotionImage.art }}
+                  style={styles.promotionalArt}
+                />
+              );
+            })}
+          </View>
         </View>
         <Text style={styles.heading}>Our Menu</Text>
         <View style={styles.categories}>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            {categories.map((category) => {
+            { categories.length === 0 ? (
+              <View style={{flexDirection: 'row'}}>
+                <View style={styles.categoryPlaceholder}/>
+                <View style={styles.categoryPlaceholder}/>
+                <View style={styles.categoryPlaceholder}/>
+                <View style={styles.categoryPlaceholder}/>
+              </View>
+            ) : (categories.map((category) => {
               return (
                 <TouchableOpacity
                   key={category.id}
@@ -169,7 +178,7 @@ export const HomeScreen: React.FC = () => {
                   </View>
                 </TouchableOpacity>
               );
-            })}
+            }))}
             <View style={styles.categoryScrollEnd}>
               <TouchableOpacity onPress={handleGoToMenu}>
                 <View style={styles.categoryScrollEndCircle}>
@@ -195,11 +204,17 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: theme.colors.background,
   },
-  promotionalArt: {
+  promotionalArtContainer: {
     width: "95%",
     height: 200,
     borderRadius: 20,
     marginTop: 10,
+    backgroundColor: theme.colors.imagePlaceholder,
+  },
+  promotionalArt: {
+    width: "100%",
+    height: "100%",
+    borderRadius: 20,
   },
   heading: {
     fontSize: 24,
@@ -223,6 +238,14 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.accent,
     top: 0,
     overflow: "visible",
+  },
+  categoryPlaceholder: {
+    width: 140,
+    height: 150,
+    borderRadius: 20,
+    marginLeft: 25,
+    backgroundColor: theme.colors.imagePlaceholder,
+    top: 0,
   },
   categoryScrollEnd: {
     width: 140,

@@ -1,3 +1,5 @@
+import { DocumentReference, Timestamp } from "firebase/firestore";
+
 export interface Product {
   id: string;
   name: string;
@@ -14,6 +16,19 @@ export interface CartItem {
   price: number;
   image: string;
   quantity: number;
+}
+
+export interface OrderItem {
+  orderQuantity: number;
+  orderedItem: DocumentReference;
+}
+
+export interface Order {
+  orderID: string;
+  itemsInOrder: OrderItem[];
+  orderValue: number;
+  orderedAt: Timestamp;
+  orderedBy: string;
 }
 
 export interface Promotion {

@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../components/AppContext";
-import { CartItem } from "../utils/InterfaceUtils";
+import { CartItem, OrderItem } from "../utils/InterfaceUtils";
 import { theme } from "../utils/StylesUtils";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -24,16 +24,54 @@ import CartItemCard from "../components/CartItemCard";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import NavigationScreen from "./NavigationScreen";
 import { isAdmin } from "../../Admin";
+import { collection, doc, addDoc, Timestamp } from "firebase/firestore";
+import { FIRESTORE_DB } from "../../FirebaseConfig";
+import AddToCartAnimation from "../components/animations/AddToCartAnimation";
 
 export const CartScreen = () => {
-  const { cart, setCart, address, cartVisible, setCartVisible } = useAppContext();
+  const { authUser, cart, setCart, address, cartVisible, setCartVisible } = useAppContext();
   const [addressSheetVisible, setAddressSheetVisible] = useState(false);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
+  if (authUser == null) {
+    throw new Error("Error: User cannot be null!")
+  }
+
   const handleEdit = (productID: string) => {
-    console.log("Cart.tsx: Editing product >>>", productID);
     setCartVisible(false);
     navigation.navigate("ProductDetails", { productID: productID });
+  };
+
+  const handleCheckOut = () => {
+    const ordersCollecitonRef = collection(FIRESTORE_DB, "orders");
+    const orderItemsCollectionRef = collection(FIRESTORE_DB, "orderItems");
+    const productCollectionRef = collection(FIRESTORE_DB, "products");
+
+    let newOrderItems: OrderItem[] = [];
+    let orderValue = 0;
+
+    for (let i in cart) {
+      const productDocumentRef = doc(productCollectionRef, cart[i].productID);
+
+      const newOrderItem: OrderItem = {
+        orderQuantity: cart[i].quantity,
+        orderedItem: productDocumentRef,
+      };
+
+      orderValue += cart[i].price * cart[i].quantity;
+      newOrderItems.push(newOrderItem);
+      addDoc(orderItemsCollectionRef, newOrderItem);
+    }
+
+    addDoc(ordersCollecitonRef, {
+      itemsInOrder: newOrderItems,
+      orderValue: orderValue,
+      orderedAt: Timestamp.now(),
+      orderedBy: authUser.uid,
+    });
+
+    navigation.navigate('Success', { successText: "Checkout Completed!", includeConfetti: true, animation: <AddToCartAnimation/> });
+    setCart([]);
   };
 
   function calculateTotaPrice() {
@@ -41,7 +79,7 @@ export const CartScreen = () => {
     for (let index in cart) {
       sum += cart[index].price * cart[index].quantity;
     }
-    return sum;
+    return sum.toFixed(2);
   }
 
   useEffect(() => {
@@ -110,9 +148,7 @@ export const CartScreen = () => {
               </View>
               <TouchableOpacity
                 style={styles.button}
-                onPress={() => {
-                  alert("Checkout completed!")
-                }}
+                onPress={handleCheckOut}
               >
                 <Text style={styles.buttonText}>Checkout</Text>
               </TouchableOpacity>

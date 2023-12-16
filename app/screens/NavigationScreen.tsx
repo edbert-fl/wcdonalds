@@ -38,6 +38,11 @@ const NavigationScreen: React.FC<NavigationMenuProps> = ({
     closeMenu();
   }
 
+  const navigateToProfile = () => {
+    navigation.navigate("UserProfile");
+    closeMenu();
+  }
+
   const navigateToMenu = () => {
     navigation.navigate("AllProducts");
     closeMenu();
@@ -72,6 +77,11 @@ const NavigationScreen: React.FC<NavigationMenuProps> = ({
                 onPress={navigateHome}
               >
                 <Text style={styles.menuItem}>Home</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={navigateToProfile}
+              >
+                <Text style={styles.menuItem}>My Profile</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={navigateToMenu}

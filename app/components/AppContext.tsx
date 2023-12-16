@@ -1,7 +1,5 @@
 import { Dispatch, SetStateAction, createContext, useContext } from "react";
 import { CartItem } from "../utils/InterfaceUtils";
-import { StackNavigationProp } from "@react-navigation/stack";
-import { RootStackParamList } from "../utils/TypesUtils";
 import { AddressDetails } from "@stripe/stripe-react-native";
 import { User } from "firebase/auth";
 

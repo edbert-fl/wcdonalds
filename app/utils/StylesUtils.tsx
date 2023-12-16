@@ -8,12 +8,14 @@ export const theme = {
     surface: '#F9F9F9',
     text: '#555555', 
     placeholderText: '#B0BEC5',
+    buttonText: '#FFFFFF',
+    link: '#0E7AFE',
     error: '#FF5252',
     success: '#3BBD5E',
     warning: '#FFC107',
     divider: '#E0E0E0',
-    buttonText: '#FFFFFF',
     search: '#EAEAEA',
+    imagePlaceholder: '#EEEEEE'
   },
 };
 
