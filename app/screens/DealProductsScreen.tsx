@@ -3,7 +3,6 @@ import { ScrollView, View, StyleSheet, Text } from "react-native";
 import {
   collection,
   doc,
-  getDoc,
   getDocs,
   query,
   where,
@@ -22,25 +21,25 @@ import NavigationScreen from "./NavigationScreen";
 import { CartScreen } from "./CartScreen";
 import { StackNavigationProp } from "@react-navigation/stack";
 
-type CategoryPageRouteProp = RouteProp<RootStackParamList, "Category">;
+type DealProductsScreenProp = RouteProp<RootStackParamList, "Deals">;
 
-export const CategoryProductsScreen = () => {
-  const route = useRoute<CategoryPageRouteProp>();
-  const { categoryID, categoryName } = route.params || {};
+export const DealProductsScreen = () => {
+  const route = useRoute<DealProductsScreenProp>();
+  const { promotionID, promotionName } = route.params || {};
 
   const [products, setProducts] = useState<Product[]>([]);
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     const fetchProducts = async () => {
-      if (categoryID != "") {
+      if (promotionID != "") {
         try {
           const productsCollectionRef = collection(FIRESTORE_DB, "products");
-          const categoryRef = doc(FIRESTORE_DB, "category", categoryID);
+          const promotionRef = doc(FIRESTORE_DB, "promotions", promotionID);
 
           const productQuery = query(
             productsCollectionRef,
-            where("category", "==", categoryRef)
+            where("promotion", "==", promotionRef)
           );
 
           const productsSnapshot = await getDocs(productQuery);
@@ -86,14 +85,14 @@ export const CategoryProductsScreen = () => {
         setMenuVisible={(menuVisible) => setMenuVisible(menuVisible)}
       />
       <AppHeader
-        title={categoryName}
+        title={promotionName}
         onBackIcon={<Icon name="arrow-back-ios" size={20} color={theme.colors.buttonText} />}
         onBackPress={() => navigation.goBack()}
         onRightIcon={<Icon name="shopping-cart" size={25} color="#FFFFFF" />}
         onRightPress={() => handleOpenCart()}
       />
       <CartScreen />
-      {categoryID === null ? (
+      {promotionID === null ? (
         <View>
           <Text>Error has occured</Text>
         </View>

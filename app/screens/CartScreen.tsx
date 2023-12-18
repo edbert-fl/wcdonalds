@@ -5,7 +5,8 @@ import {
   Image,
   View,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  Platform
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useAppContext } from "../components/AppContext";
@@ -18,15 +19,12 @@ import Modal from "react-native-modal";
 import AppHeader from "../components/AppHeader";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import AddressForm from "../components/AddressForm";
-import CartEmptyScreen from "./CartEmptyScreen";
+import EmptyScreen from "./EmptyScreen";
 import AddressCard from "../components/AddressCard";
 import CartItemCard from "../components/CartItemCard";
 import { StripeProvider } from "@stripe/stripe-react-native";
-import NavigationScreen from "./NavigationScreen";
-import { isAdmin } from "../../Admin";
 import { collection, doc, addDoc, Timestamp } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
-import AddToCartAnimation from "../components/animations/AddToCartAnimation";
 
 export const CartScreen = () => {
   const { authUser, cart, setCart, address, cartVisible, setCartVisible } = useAppContext();
@@ -70,7 +68,8 @@ export const CartScreen = () => {
       orderedBy: authUser.uid,
     });
 
-    navigation.navigate('Success', { successText: "Checkout Completed!", includeConfetti: true, animation: <AddToCartAnimation/> });
+    setCartVisible(false);
+    navigation.navigate('Success', { successText: "Checkout Completed!", includeConfetti: true, animation: "addToCart" });
     setCart([]);
   };
 
@@ -102,8 +101,6 @@ export const CartScreen = () => {
         return null;
       }
     }
-
-    console.log("Cart.tsx: cart >>>", cart);
   }, [cart]);
 
   return (
@@ -127,16 +124,17 @@ export const CartScreen = () => {
           title="Cart"
           onBackPress={() => setCartVisible(false)}
           onBackIcon={<Icon name="arrow-back-ios" size={20} color={theme.colors.buttonText} />}
+          short={Platform.OS === "android" ? (true) : (false)}
         />
         {cart.length === 0 ? (
-          <CartEmptyScreen/>
+          <EmptyScreen icon="shoppingCart" text="Your cart looks empty..."/>
         ) : (
           <ScrollView style={styles.cartContainer}>
             <View style={{ height: 30 }} />
             <AddressForm addressSheetVisible={addressSheetVisible} setAddressSheetVisible={setAddressSheetVisible}/>
             <AddressCard address={address} setAddressSheetVisible={setAddressSheetVisible}/>
             {cart.map((cartItem) => (
-              <CartItemCard cartItem={cartItem} handleEdit={handleEdit}/>
+              <CartItemCard key={cartItem.productID} cartItem={cartItem} handleEdit={handleEdit}/>
             ))}
             <View style={styles.cartFooter}>
               <View style={styles.totalPriceContainer}>

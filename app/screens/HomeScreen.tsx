@@ -23,6 +23,8 @@ import { RootStackParamList } from "../utils/TypesUtils";
 import { SearchBar } from "react-native-elements";
 import SearchScreen from "./SearchScreen";
 import { MainHeader } from "../components/MainHeader";
+import AdminButton from "../components/AdminButton";
+import { useAppContext } from "../components/AppContext";
 
 export const HomeScreen: React.FC = () => {
   const [promotions, setPromotions] = useState<Promotion[]>([]);
@@ -105,69 +107,78 @@ export const HomeScreen: React.FC = () => {
     }
   };
 
-  const handleCategoryCardPress = (categoryID: string) => {
-    navigation.navigate("Category", { categoryID });
+  const handleCategoryCardPress = (categoryID: string, categoryName: string) => {
+    navigation.navigate("Category", { categoryID, categoryName });
   };
 
+  const handleDealPress = (promotionID: string, promotionName: string) => {
+    navigation.navigate("Deals", { promotionID, promotionName });
+  };
+
+  const { authUser } = useAppContext();
+
+  if (authUser == null) {
+    throw new Error("Error: user cannot be null");
+  }
+
   return (
-    <View>
+    <View style={styles.background}>
       <MainHeader title="WcDonald's" />
-      {/* { isAdmin(authUser.uid) ? (
-        <AdminButton/>
-      ) : (
-        null
-      )} */}
-      <ScrollView contentContainerStyle={styles.background}>
-        <SearchBar
-          onChangeText={handleSearchChange}
-          value={search}
-          onPressIn={handleOpenSearchPage}
-          platform="ios"
-          inputStyle={{ backgroundColor: theme.colors.search }}
-          onBlur={handleCloseSearchPage}
-          onClear={handleCloseSearchPage}
-          inputContainerStyle={{ backgroundColor: theme.colors.search }}
-        />
-        <SearchScreen
-          visible={searchPageVisible}
-          setVisible={setSearchPageVisible}
-          search={search}
-          setSearch={setSearch}
-        />
-        <Text style={styles.heading}>Your Deals</Text>
-        <View
-          style={{
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          <View style={styles.promotionalArtContainer}>
-            {promotionImages.map((promotionImage) => {
-              return (
-                <Image
-                  key={promotionImage.id}
-                  source={{ uri: promotionImage.art }}
-                  style={styles.promotionalArt}
-                />
-              );
-            })}
-          </View>
+      <SearchBar
+        onChangeText={handleSearchChange}
+        value={search}
+        onPressIn={handleOpenSearchPage}
+        platform="ios"
+        inputStyle={{ backgroundColor: theme.colors.search }}
+        onBlur={handleCloseSearchPage}
+        onClear={handleCloseSearchPage}
+        inputContainerStyle={{ backgroundColor: theme.colors.search }}
+      />
+      <SearchScreen
+        visible={searchPageVisible}
+        setVisible={setSearchPageVisible}
+        search={search}
+        setSearch={setSearch}
+      />
+      <Text style={styles.heading}>Your Deals</Text>
+      <View
+        style={{
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        <View style={styles.promotionalArtContainer}>
+          {promotions.map((promotion) => {
+            return (
+              <TouchableOpacity key={promotion.id} onPress={() => handleDealPress(promotion.id, promotion.name)}>
+                <View>
+                  <Text style={styles.promotionLabel}>{promotion.name}</Text>
+                  <Image
+                    source={{ uri: promotion.art }}
+                    style={styles.promotionalArt}
+                  />
+                </View>
+              </TouchableOpacity>
+            );
+          })}
         </View>
-        <Text style={styles.heading}>Our Menu</Text>
-        <View style={styles.categories}>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            { categories.length === 0 ? (
-              <View style={{flexDirection: 'row'}}>
-                <View style={styles.categoryPlaceholder}/>
-                <View style={styles.categoryPlaceholder}/>
-                <View style={styles.categoryPlaceholder}/>
-                <View style={styles.categoryPlaceholder}/>
-              </View>
-            ) : (categories.map((category) => {
+      </View>
+      <Text style={styles.heading}>Our Menu</Text>
+      <View style={styles.categories}>
+        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
+          {categories.length === 0 ? (
+            <View style={{ flexDirection: "row" }}>
+              <View style={styles.categoryPlaceholder} />
+              <View style={styles.categoryPlaceholder} />
+              <View style={styles.categoryPlaceholder} />
+              <View style={styles.categoryPlaceholder} />
+            </View>
+          ) : (
+            categories.map((category) => {
               return (
                 <TouchableOpacity
                   key={category.id}
-                  onPress={() => handleCategoryCardPress(category.id)}
+                  onPress={() => handleCategoryCardPress(category.id, category.name)}
                 >
                   <View key={category.id} style={styles.category}>
                     <Text style={styles.categoryLabel}>{category.name}</Text>
@@ -178,23 +189,24 @@ export const HomeScreen: React.FC = () => {
                   </View>
                 </TouchableOpacity>
               );
-            }))}
-            <View style={styles.categoryScrollEnd}>
-              <TouchableOpacity onPress={handleGoToMenu}>
-                <View style={styles.categoryScrollEndCircle}>
-                  <Icon
-                    style={{ alignSelf: "center" }}
-                    name="arrow-forward"
-                    size={50}
-                    color="#FFFFFF"
-                  />
-                </View>
-                <Text style={styles.categoryScrollEndText}>Full Menu</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-        </View>
-      </ScrollView>
+            })
+          )}
+          <View style={styles.categoryScrollEnd}>
+            <TouchableOpacity onPress={handleGoToMenu}>
+              <View style={styles.categoryScrollEndCircle}>
+                <Icon
+                  style={{ alignSelf: "center" }}
+                  name="arrow-forward"
+                  size={50}
+                  color="#FFFFFF"
+                />
+              </View>
+              <Text style={styles.categoryScrollEndText}>Full Menu</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </View>
+      <AdminButton />
     </View>
   );
 };
@@ -202,7 +214,7 @@ export const HomeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   background: {
     height: "100%",
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.background
   },
   promotionalArtContainer: {
     width: "95%",
@@ -210,11 +222,25 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginTop: 10,
     backgroundColor: theme.colors.imagePlaceholder,
+    zIndex: 1
   },
   promotionalArt: {
     width: "100%",
     height: "100%",
     borderRadius: 20,
+    zIndex: 2,
+
+  },
+  promotionLabel: {
+    fontSize: 36,
+    color: 'white',
+    textShadowColor: 'black',
+    textShadowRadius: 80,
+    fontWeight: 'bold',
+    position: 'absolute',
+    bottom: 10,
+    right: 25,
+    zIndex: 3
   },
   heading: {
     fontSize: 24,

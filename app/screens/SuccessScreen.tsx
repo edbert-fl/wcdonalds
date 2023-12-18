@@ -7,6 +7,7 @@ import { RootStackParamList } from '../utils/TypesUtils';
 import { successStyles } from '../utils/StylesUtils';
 import { useAppContext } from '../components/AppContext';
 import AddToCartAnimation from '../components/animations/AddToCartAnimation';
+import ConfirmAnimation from '../components/animations/ConfirmAnimation';
 
 type SuccessPageRouteProp = RouteProp<RootStackParamList, "Success">;
 
@@ -24,12 +25,21 @@ const SuccessScreen: React.FC<AddToCartSuccessProps> = ({ route }) => {
         confettiCannonRef.current.start();
     }
 
+    const showAnimation = (animation: string | null) => {
+        switch (animation) {
+            case 'confirm':
+                return <ConfirmAnimation/>
+            case 'addToCart':
+                return <AddToCartAnimation/>
+        }
+    }
+
     console.log("AddToCartSuccess.tsx: successText >>>", successText)
     console.log("AddToCartSuccess.tsx: includeConfetti >>>", includeConfetti)
 
     return (
         <View style={successStyles.container}>
-            {animation}
+            {showAnimation(animation)}
             <Text style={successStyles.text}>{successText}</Text>
             <TouchableOpacity style={successStyles.button} onPress={() => navigation.navigate("AllProducts")}>
                 <Text style={successStyles.buttonText}>Back to Menu</Text>

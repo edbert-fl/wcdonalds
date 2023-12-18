@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   TouchableOpacity,
+  Platform,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -17,11 +18,9 @@ import { theme } from "../utils/StylesUtils";
 import { SelectList } from "react-native-dropdown-select-list";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
-import ConfirmAnimation from "../components/animations/ConfirmAnimation";
 
 const AddProductScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-  const [selected, setSelected] = useState("");
   const [productName, setProductName] = useState("");
   const [category, setCategory] = useState("");
   const [imageURL, setImageURL] = useState("");
@@ -66,7 +65,7 @@ const AddProductScreen = () => {
 
         const docRef = await addDoc(collection(FIRESTORE_DB, 'products'), newProduct);
         console.log('Product document added with ID:', docRef.id);
-        navigation.navigate('Success', { successText: "Product added to menu!", includeConfetti: false, animation: <ConfirmAnimation/> });
+        navigation.navigate('Success', { successText: "Product added to menu!", includeConfetti: false, animation: "confirm" });
       } catch (error) {
         console.error('Error adding product document:', error);
       }
@@ -85,7 +84,7 @@ const AddProductScreen = () => {
           />
         }
       />
-      <KeyboardAvoidingView behavior="padding" style={styles.container}>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
         <ScrollView
           style={{ width: "100%" }}
           showsVerticalScrollIndicator={false}

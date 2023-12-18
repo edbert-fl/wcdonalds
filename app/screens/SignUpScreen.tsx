@@ -1,40 +1,29 @@
 import { View, Text, StyleSheet, TextInput, ActivityIndicator, Button, KeyboardAvoidingView, TouchableOpacity, Platform } from 'react-native'
 import React, { useState } from 'react'
 import { FIREBASE_AUTH } from '../../FirebaseConfig';
-import { createUserWithEmailAndPassword, signInAnonymously, signInWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, signInAnonymously, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { theme } from '../utils/StylesUtils'
-import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../utils/TypesUtils';
+import { useNavigation } from '@react-navigation/native';
 
-const LoginScreen = () => {
+const SignUpScreen = () => {
+    const [displayName, setDisplayName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
 
     const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
-    const handleSignUp = () => {
-        navigation.navigate("SignUp");
-    }
-
-    const signIn = async () => {
-        setLoading(true);
-        try {
-            const response = await signInWithEmailAndPassword(FIREBASE_AUTH, email, password);
-            console.log("Successfully logged in");
-        } catch (error: any) {
-            console.log(error);
-            alert('Sign in failed: ' + error.message);
-        } finally {
-            setLoading(false);
-        }
+    const handleLogin = () => {
+        navigation.navigate("Login");
     }
 
     const signUp = async () => {
         setLoading(true);
         try {
-            const response = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
+            const response = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
+            await updateProfile(response.user, {displayName : displayName})
             console.log("Successfully created new user");
         } catch (error: any) {
             console.log(error);
@@ -62,6 +51,14 @@ const LoginScreen = () => {
             <Text style={styles.logo}>WcDonald's</Text>
             <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.formContainer}>
             <TextInput
+                value={displayName}
+                style={styles.input}
+                placeholder="Display Name"
+                autoCapitalize="none"
+                onChangeText={(text) => setDisplayName(text)}
+                enablesReturnKeyAutomatically
+            />
+            <TextInput
                 value={email}
                 style={styles.input}
                 placeholder="Email"
@@ -83,16 +80,16 @@ const LoginScreen = () => {
                 <ActivityIndicator size="large" color={theme.colors.primary} />
             ) : (
                 <View style={{marginTop: 50}}>
-                    <TouchableOpacity style={styles.button} onPress={signIn}>
-                        <Text style={styles.buttonText}>Login</Text>
-                    </TouchableOpacity>
                     <View style={{flex: 1}}/>
+                    <TouchableOpacity style={styles.button} onPress={signUp}>
+                        <Text style={styles.buttonText}>Create Account</Text>
+                    </TouchableOpacity>
                     <TouchableOpacity style={styles.secondaryButton} onPress={loginAsGuest}>
                         <Text style={styles.buttonText}>Login as guest</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.linkContainer} onPress={handleSignUp}>
-                        <Text style={styles.text}>Don't have an account?</Text>
-                        <Text style={styles.link}>Sign up instead</Text>
+                    <TouchableOpacity style={styles.linkContainer} onPress={handleLogin}>
+                        <Text style={styles.text}>Already Have an account?</Text>
+                        <Text style={styles.link}>Login instead</Text>
                     </TouchableOpacity>
                 </View>
             )}
@@ -109,14 +106,13 @@ export const styles = StyleSheet.create({
       paddingHorizontal: 20,
       backgroundColor: theme.colors.background,
     },
-    linkContainer: {
-        marginTop: 50,
-        height: 'auto',
-        display: 'flex',
-        alignItems: 'center'
-    },
     text:{
         color: theme.colors.text
+    },
+    linkContainer: {
+        marginTop: 50,
+        display: 'flex',
+        alignItems: 'center',
     },
     link: {
         color: theme.colors.link,
@@ -169,4 +165,4 @@ export const styles = StyleSheet.create({
     },
   });
 
-export default LoginScreen
+export default SignUpScreen

@@ -95,9 +95,9 @@ const styles = StyleSheet.create({
   cart: {
     flex: 1,
     justifyContent: 'flex-start',
-    backgroundColor: theme.colors.surface,
+    backgroundColor: theme.colors.background,
     width: "100%",
     margin: 0,
-    marginTop: 75
+    marginTop: 160
   },
 });

@@ -103,7 +103,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
               "AddToCartButton.tsx: No duplicate item found. Adding item to cart..."
             );
             setCart((prevCart) => [...prevCart, fetchedProduct]);
-            navigation.navigate('Success', { successText: "Item added to cart!", includeConfetti: true, animation: <AddToCartAnimation/> });
+            navigation.navigate('Success', { successText: "Item added to cart!", includeConfetti: true, animation: "addToCart" });
           }
         } else {
           console.error("Product not found or fetch failed.");

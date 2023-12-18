@@ -20,6 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../utils/TypesUtils";
 import ShimmerPlaceholder from "react-native-shimmer-placeholder";
+import EmptyScreen from "./EmptyScreen";
 
 export const UserProfileScreen = () => {
   const { authUser, setCart, handleOpenCart } = useAppContext();
@@ -134,7 +135,7 @@ export const UserProfileScreen = () => {
           <OrderHistoryPlaceholder />
         </View>
       ) : orders.length === 0 ? (
-        <Text>No previous orders</Text>
+        <EmptyScreen icon="empty" text="Looks like you haven't made any orders yet..."/>
       ) : (
         orders.map((order) => (
           <Card containerStyle={{ borderRadius: 15 }} key={order.orderID}>
@@ -176,7 +177,7 @@ export const UserProfileScreen = () => {
                   </View>
                 </View>
               ) : (
-                <Text>ERROR NO DATE FOUND!</Text>
+                <Text>No date found...</Text>
               )}
               <View>
                 <Text style={styles.price}>${order.orderValue.toFixed(2)}</Text>

@@ -60,43 +60,6 @@ export const successStyles = StyleSheet.create({
     },
   })
 
-export const headerStyles = StyleSheet.create({
-  headerCenterContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    width: '100%',
-    flex: 3
-  },
-  backButton: {
-    paddingLeft: 10,
-    marginRight: 'auto',
-    width: '20%',
-    flex: 1
-  },
-  rightButton: {
-    paddingRight: 10,
-    alignItems: 'flex-end',
-    width: '20%'
-  },
-  buttonIcon: {
-    color: 'white',
-    fontSize: 20,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: theme.colors.primary,
-    paddingTop: 50,
-    padding: 15,
-  },
-  headerText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-})
-
   export const productStyles = StyleSheet.create({
     image: {
       width: "100%",

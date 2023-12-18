@@ -17,6 +17,8 @@ import HomeScreen from "./app/screens/HomeScreen";
 import { CategoryProductsScreen } from "./app/screens/CategoryProductsScreen";
 import LoginScreen from "./app/screens/LoginScreen";
 import UserProfileScreen from "./app/screens/UserProfileScreen";
+import { DealProductsScreen } from "./app/screens/DealProductsScreen";
+import SignUpScreen from "./app/screens/SignUpScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -129,6 +131,12 @@ export default function App() {
               />
 
               <Stack.Screen
+                name="Deals"
+                component={DealProductsScreen}
+                options={{ headerShown: false }}
+              />
+
+              <Stack.Screen
                 name="Success"
                 component={SuccessScreenFC}
                 options={{ headerShown: false }}
@@ -153,11 +161,18 @@ export default function App() {
               />
             </>
           ) : (
+            <>
             <Stack.Screen
               name="Login"
               component={LoginScreen}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="SignUp"
+              component={SignUpScreen}
+              options={{ headerShown: false }}
+            />
+            </>
           )}
         </Stack.Navigator>
       </AppContext.Provider>

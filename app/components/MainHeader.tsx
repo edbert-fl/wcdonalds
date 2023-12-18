@@ -8,6 +8,7 @@ import {
   import { isAdmin } from "../../Admin";
   import { useAppContext } from "./AppContext";
   import { CartScreen } from "../screens/CartScreen";
+import { SafeAreaView } from "react-native-safe-area-context";
 
   interface MainHeaderProps {
     title: string;
@@ -22,18 +23,18 @@ import {
   
     return (
       <View>
-        <NavigationScreen
-          admin={isAdmin(authUser.uid)}
-          handleSignOut={handleSignOut}
-          menuVisible={menuVisible}
-          setMenuVisible={(menuVisible) => setMenuVisible(menuVisible)}
-        />
         <AppHeader
           title={title}
           onBackIcon={<Icon name="menu" size={25} color="#FFFFFF" />}
           onBackPress={() => handleOpenMenu()}
           onRightPress={() => handleOpenCart()}
           onRightIcon={<Icon name="shopping-cart" size={25} color="#FFFFFF" />}
+        />
+        <NavigationScreen
+          admin={isAdmin(authUser.uid)}
+          handleSignOut={handleSignOut}
+          menuVisible={menuVisible}
+          setMenuVisible={(menuVisible) => setMenuVisible(menuVisible)}
         />
         <CartScreen />
     </View>

@@ -7,6 +7,9 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   TouchableOpacity,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from "../utils/TypesUtils";
@@ -176,7 +179,7 @@ const AddPromotionScreen = () => {
     navigation.navigate("Success", {
       successText: "Successfully added promotion!",
       includeConfetti: false,
-      animation: <ConfirmAnimation />,
+      animation: "confirm",
     });
   };
 
@@ -245,107 +248,115 @@ const AddPromotionScreen = () => {
           />
         }
       />
-      <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <ScrollView
-          style={{ width: "100%" }}
-          showsVerticalScrollIndicator={false}
-        >
-          <View style={{ marginTop: 30 }} />
-          <View style={styles.fieldContainer}>
-            <Text style={styles.label}>Promotion Name</Text>
-            <TextInput
-              style={[styles.input, invalidName && styles.inputError]}
-              autoCapitalize="sentences"
-              autoFocus
-              enterKeyHint="done"
-              onChangeText={(text) => setPromotionName(text)}
-            />
-            <FormErrorMessage
-              visible={invalidName}
-              message={"Name cannot be empty!"}
-            />
-          </View>
-
-          <View style={styles.fieldContainer}>
-            <Text style={styles.label}>Products in Promotion</Text>
-            {invalidProducts ? (
-              <MultipleSelectList
-                boxStyles={styles.dropdownError}
-                searchPlaceholder="Search for products"
-                setSelected={(key: any) => setSelectedProducts(key)}
-                onSelect={() => console.log(selectedProducts)}
-                data={data}
-                save="key"
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView
+            style={{ width: "100%"}}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={{ marginTop: 30 }} />
+            <View style={styles.fieldContainer}>
+              <Text style={styles.label}>Promotion Name</Text>
+              <TextInput
+                style={[styles.input, invalidName && styles.inputError]}
+                autoCapitalize="sentences"
+                autoFocus
+                enterKeyHint="done"
+                onChangeText={(text) => setPromotionName(text)}
               />
-            ) : (
-              <MultipleSelectList
-                boxStyles={styles.dropdown}
-                searchPlaceholder="Search for products"
-                setSelected={(key: any) => setSelectedProducts(key)}
-                onSelect={() => console.log(selectedProducts)}
-                data={data}
-                save="key"
+              <FormErrorMessage
+                visible={invalidName}
+                message={"Name cannot be empty!"}
               />
-            )}
-            <FormErrorMessage
-              visible={invalidURL}
-              message={"At least one product needs to be selected!"}
-            />
-          </View>
+            </View>
 
-          <View style={styles.fieldContainer}>
-            <Text style={styles.label}>Art URL</Text>
-            <TextInput
-              style={[styles.input, invalidURL && styles.inputError]}
-              autoCapitalize="sentences"
-              textContentType="URL"
-              keyboardType="url"
-              enterKeyHint="done"
-              onChangeText={(text) => setPromotionArtURL(text)}
-            />
-            <FormErrorMessage
-              visible={invalidURL}
-              message={"Promotion Art URL cannot be empty!"}
-            />
-          </View>
+            <View style={styles.fieldContainer}>
+              <Text style={styles.label}>Products in Promotion</Text>
+              {invalidProducts ? (
+                <MultipleSelectList
+                  boxStyles={styles.dropdownError}
+                  searchPlaceholder="Search for products"
+                  setSelected={(key: any) => setSelectedProducts(key)}
+                  onSelect={() => console.log(selectedProducts)}
+                  data={data}
+                  save="key"
+                />
+              ) : (
+                <MultipleSelectList
+                  boxStyles={styles.dropdown}
+                  searchPlaceholder="Search for products"
+                  setSelected={(key: any) => setSelectedProducts(key)}
+                  onSelect={() => console.log(selectedProducts)}
+                  data={data}
+                  save="key"
+                />
+              )}
+              <FormErrorMessage
+                visible={invalidURL}
+                message={"At least one product needs to be selected!"}
+              />
+            </View>
 
-          <View style={styles.fieldContainer}>
-            <Text style={styles.label}>Description</Text>
-            <TextInput
-              style={[
-                styles.largeInput,
-                invalidDescription && styles.inputError,
-              ]}
-              autoCapitalize="sentences"
-              returnKeyType="done"
-              enterKeyHint="done"
-              onChangeText={(text) => setPromotionDescription(text)}
-              multiline
-            />
-            <FormErrorMessage
-              visible={invalidDescription}
-              message={"Promotion Description cannot be empty!"}
-            />
-          </View>
+            <View style={styles.fieldContainer}>
+              <Text style={styles.label}>Art URL</Text>
+              <TextInput
+                style={[styles.input, invalidURL && styles.inputError]}
+                autoCapitalize="sentences"
+                textContentType="URL"
+                keyboardType="url"
+                enterKeyHint="done"
+                onChangeText={(text) => setPromotionArtURL(text)}
+              />
+              <FormErrorMessage
+                visible={invalidURL}
+                message={"Promotion Art URL cannot be empty!"}
+              />
+            </View>
 
-          <View style={styles.fieldContainer}>
-            <Text style={styles.label}>Rate</Text>
-            <TextInput
-              style={[styles.input, invalidRate && styles.inputError]}
-              keyboardType="numeric"
-              enterKeyHint="done"
-              onChangeText={(text) => updateRate(text)}
-            />
-            <FormErrorMessage
-              visible={invalidRate}
-              message={"Rate must be between 0 and 1!"}
-            />
-          </View>
+            <View style={styles.fieldContainer}>
+              <Text style={styles.label}>Description</Text>
+              <TextInput
+                style={[
+                  styles.largeInput,
+                  invalidDescription && styles.inputError,
+                ]}
+                autoCapitalize="sentences"
+                returnKeyType="done"
+                enterKeyHint="done"
+                onChangeText={(text) => setPromotionDescription(text)}
+                multiline
+              />
+              <FormErrorMessage
+                visible={invalidDescription}
+                message={"Promotion Description cannot be empty!"}
+              />
+            </View>
 
-          <TouchableOpacity style={styles.button} onPress={handleAddPromotion}>
-            <Text style={styles.buttonText}>Add Promotion</Text>
-          </TouchableOpacity>
-        </ScrollView>
+            <View style={styles.fieldContainer}>
+              <Text style={styles.label}>Rate</Text>
+              <TextInput
+                style={[styles.input, invalidRate && styles.inputError]}
+                keyboardType="numeric"
+                enterKeyHint="done"
+                onChangeText={(text) => updateRate(text)}
+              />
+              <FormErrorMessage
+                visible={invalidRate}
+                message={"Rate must be between 0 and 1!"}
+              />
+            </View>
+
+            <TouchableOpacity
+              style={styles.button}
+              onPress={handleAddPromotion}
+            >
+              <Text style={styles.buttonText}>Add Promotion</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
     </View>
   );
@@ -408,6 +419,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     backgroundColor: theme.colors.surface,
     fontSize: 16,
+    textAlignVertical: "top"
   },
   dropdown: {
     borderWidth: 1,

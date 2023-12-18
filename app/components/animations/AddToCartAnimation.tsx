@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text, Platform } from 'react-native';
 import LottieView from 'lottie-react-native';
 
 
@@ -9,19 +9,20 @@ const AddToCartAnimation = () => {
   useEffect(() => {
     if (animationRef.current) {
       animationRef.current.play();
-      console.log("AddToCartAnimation.tsx: Playing animation");
     }
   }, []);
 
   return (
-    <View>
+    Platform.OS === 'ios' ? (
       <LottieView
         ref={(animation) => (animationRef.current = animation)}
         source={require('../../../assets/add-to-cart.json')}
         style={{width:120, height: 100, marginBottom: 80}}
         loop={true}
       />
-    </View>
+    ) : (
+      null
+    )
   );
 };
 
