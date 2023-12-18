@@ -16,4 +16,3 @@ export type RootStackParamList = {
     'Deals': { promotionID: string, promotionName: string };
     navigation: StackNavigationProp<RootStackParamList, 'AllProducts'>;
   };
-  
