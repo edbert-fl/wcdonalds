@@ -22,7 +22,7 @@ module.exports = {
        "!**/babel.config.js",
        "!**/jest.setup.js",
      ],
-     moduleFileExtensions: ["js", "ts", "tsx"],
+     moduleFileExtensions: ["js", "ts", "tsx", "jsx", "json", "node", "@env"],
      transformIgnorePatterns: [
        "node_modules/(?!(jest-)?react-native|react-clone-referenced-element|@react-native-community|expo(nent)?|@expo(nent)?/.*|react-navigation|@react-navigation/.*|@unimodules/.*|sentry-expo|native-base|@react-native)",
      ],
