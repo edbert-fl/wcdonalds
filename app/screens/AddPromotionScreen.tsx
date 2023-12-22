@@ -48,7 +48,6 @@ const AddPromotionScreen = () => {
   const [invalidURL, setInvalidURL] = useState(false);
   const [invalidRate, setInvalidRate] = useState(false);
   const [invalidDescription, setInvalidDescription] = useState(false);
-  const [invalidFormSubmission, setInvalidFormSubmission] = useState(false);
 
   // Array to store products fetched from Firestore
   let tempData: PromotionProduct[] = [];
@@ -73,41 +72,44 @@ const AddPromotionScreen = () => {
     fetchData();
   }, []);
 
-  // Function to check if a value is empty
-  function checkIfEmpty(
+  function checkIfValid(
     value: any | null,
     setErrorValue: (arg0: boolean) => void
   ) {
     if (value === null) {
       setErrorValue(true);
-      setInvalidFormSubmission(true);
-      return;
+      return false;
     }
 
     if (typeof value === "string" || Array.isArray(value)) {
       if (value.length === 0) {
         setErrorValue(true);
-        setInvalidFormSubmission(true);
+        return false;
       } else {
         setErrorValue(false);
+        return true;
       }
     }
+    setErrorValue(false);
+    return true;
+  }
+
+  const checkFields = async () => {
+    const validProduct = checkIfValid(selectedProducts, setInvalidProducts);
+    const validURL = checkIfValid(promotionArtURL, setInvalidURL);
+    const validDescription = checkIfValid(promotionDescription, setInvalidDescription);
+    const validName = checkIfValid(promotionName, setInvalidName);
+    const validRate = checkIfValid(rate, setInvalidRate);
+
+    return validProduct && validURL && validDescription && validName && validRate;
   }
 
   // Function to handle adding a new promotion
   const handleAddPromotion = async () => {
-    // Reset form submission error state
-    setInvalidFormSubmission(false);
-
-    // Validate form fields
-    checkIfEmpty(selectedProducts, setInvalidProducts);
-    checkIfEmpty(promotionArtURL, setInvalidURL);
-    checkIfEmpty(promotionDescription, setInvalidDescription);
-    checkIfEmpty(promotionName, setInvalidName);
-    checkIfEmpty(rate, setInvalidRate);
+    const validFormSubmittion = await checkFields()
 
     // If the form is valid, proceed with adding the promotion
-    if (!invalidFormSubmission) {
+    if (validFormSubmittion) {
       try {
         // Add a new promotion and get its ID
         const newPromotionID = await addPromotion();
@@ -166,6 +168,13 @@ const AddPromotionScreen = () => {
                 console.error("Error updating product document:", error);
               }
             }
+
+            navigation.navigate("Success", {
+              successText: "Successfully added promotion!",
+              includeConfetti: false,
+              animation: "confirm",
+            });
+
           } else {
             console.log("Error: Promotion document does not exist.");
           }
@@ -174,13 +183,6 @@ const AddPromotionScreen = () => {
         console.error("Error adding promotion:", error);
       }
     }
-
-    // Navigate to the success screen after adding the promotion
-    navigation.navigate("Success", {
-      successText: "Successfully added promotion!",
-      includeConfetti: false,
-      animation: "confirm",
-    });
   };
 
   // Function to add a new promotion to Firestore
@@ -222,7 +224,6 @@ const AddPromotionScreen = () => {
       setRate(inputValue);
       setInvalidRate(false);
     } else {
-      console.log("Invalid", invalidRate);
       setInvalidRate(true);
     }
   };
@@ -254,13 +255,14 @@ const AddPromotionScreen = () => {
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView
-            style={{ width: "100%"}}
+            style={{ width: "100%" }}
             showsVerticalScrollIndicator={false}
           >
             <View style={{ marginTop: 30 }} />
             <View style={styles.fieldContainer}>
               <Text style={styles.label}>Promotion Name</Text>
               <TextInput
+                placeholder="Promotion"
                 style={[styles.input, invalidName && styles.inputError]}
                 autoCapitalize="sentences"
                 autoFocus
@@ -277,6 +279,7 @@ const AddPromotionScreen = () => {
               <Text style={styles.label}>Products in Promotion</Text>
               {invalidProducts ? (
                 <MultipleSelectList
+                  placeholder="Select Products"
                   boxStyles={styles.dropdownError}
                   searchPlaceholder="Search for products"
                   setSelected={(key: any) => setSelectedProducts(key)}
@@ -286,6 +289,7 @@ const AddPromotionScreen = () => {
                 />
               ) : (
                 <MultipleSelectList
+                  placeholder="Select Products"
                   boxStyles={styles.dropdown}
                   searchPlaceholder="Search for products"
                   setSelected={(key: any) => setSelectedProducts(key)}
@@ -304,6 +308,7 @@ const AddPromotionScreen = () => {
               <Text style={styles.label}>Art URL</Text>
               <TextInput
                 style={[styles.input, invalidURL && styles.inputError]}
+                placeholder="Art URL"
                 autoCapitalize="sentences"
                 textContentType="URL"
                 keyboardType="url"
@@ -323,6 +328,7 @@ const AddPromotionScreen = () => {
                   styles.largeInput,
                   invalidDescription && styles.inputError,
                 ]}
+                placeholder="Description"
                 autoCapitalize="sentences"
                 returnKeyType="done"
                 enterKeyHint="done"
@@ -338,6 +344,7 @@ const AddPromotionScreen = () => {
             <View style={styles.fieldContainer}>
               <Text style={styles.label}>Rate</Text>
               <TextInput
+                placeholder="Rate"
                 style={[styles.input, invalidRate && styles.inputError]}
                 keyboardType="numeric"
                 enterKeyHint="done"
@@ -419,7 +426,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     backgroundColor: theme.colors.surface,
     fontSize: 16,
-    textAlignVertical: "top"
+    textAlignVertical: "top",
   },
   dropdown: {
     borderWidth: 1,

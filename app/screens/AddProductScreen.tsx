@@ -18,6 +18,7 @@ import { theme } from "../utils/StylesUtils";
 import { SelectList } from "react-native-dropdown-select-list";
 import { addDoc, collection, getDocs } from "firebase/firestore";
 import { FIRESTORE_DB } from "../../FirebaseConfig";
+import FormErrorMessage from "../components/FormErrorMessage";
 
 const AddProductScreen = () => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
@@ -26,6 +27,13 @@ const AddProductScreen = () => {
   const [imageURL, setImageURL] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
+
+  const [invalidName, setInvalidName] = useState(false);
+  const [invalidCategory, setInvalidCategory] = useState(false);
+  const [invalidURL, setInvalidURL] = useState(false);
+  const [invalidPrice, setInvalidPrice] = useState(false);
+  const [invalidPriceValue, setInvalidPriceValue] = useState(false);
+  const [invalidDescription, setInvalidDescription] = useState(false);
 
   interface Category {
     key: number;
@@ -43,7 +51,6 @@ const AddProductScreen = () => {
         querySnapshot.forEach((doc) => {
           i++;
           data.push({ key: i, value: doc.data().name });
-          console.log(data);
         });
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -52,24 +59,93 @@ const AddProductScreen = () => {
 
     fetchData();
   }, []);
-  
-  const handleAddProduct = async () => {
-    try {
-        const newProduct = {
-            category: category,
-            description: description,
-            image: imageURL,
-            name: productName,
-            price: parseFloat(price), 
-          };
 
-        const docRef = await addDoc(collection(FIRESTORE_DB, 'products'), newProduct);
-        console.log('Product document added with ID:', docRef.id);
-        navigation.navigate('Success', { successText: "Product added to menu!", includeConfetti: false, animation: "confirm" });
-      } catch (error) {
-        console.error('Error adding product document:', error);
+  function checkIfValid(
+    value: any | null,
+    setErrorValue: (arg0: boolean) => void
+  ) {
+    if (value === null) {
+      // Invalid submission
+      setErrorValue(true);
+      return false;
+    }
+
+    if (typeof value === "string" || Array.isArray(value)) {
+      if (value.length === 0) {
+        // Invalid submission
+        setErrorValue(true);
+        return false;
+      } else {
+        // Valid submission
+        setErrorValue(false);
+        return true;
       }
+    }
+    // Valid submission
+    setErrorValue(false);
+    return true;
   }
+
+  const checkValidPrice = (price: number) => {
+    try {
+      if (price <= 0) {
+        setInvalidPriceValue(true)
+        return false;
+      }
+    } catch {
+      setInvalidPriceValue(true)
+      return false;
+    } finally { 
+      return true;
+    }
+  };
+
+  const checkFields = async () => {
+    const validName = checkIfValid(productName, setInvalidName);
+    const validCategory = checkIfValid(category, setInvalidCategory);
+    const validURL = checkIfValid(imageURL, setInvalidURL);
+    const validPrice = checkIfValid(price, setInvalidPrice);
+    const validDescription = checkIfValid(description, setInvalidDescription);
+    const validPriceValue = checkValidPrice(parseFloat(price));
+
+    return (
+      validName &&
+      validCategory &&
+      validURL &&
+      validPrice &&
+      validDescription &&
+      validPriceValue
+    );
+  };
+
+  const handleAddProduct = async () => {
+    let validFormSubmission = await checkFields();
+
+    if (validFormSubmission) {
+      try {
+        const newProduct = {
+          category: category,
+          description: description,
+          image: imageURL,
+          name: productName,
+          price: parseFloat(price),
+        };
+
+        const docRef = await addDoc(
+          collection(FIRESTORE_DB, "products"),
+          newProduct
+        );
+        console.log("Product document added with ID:", docRef.id);
+        navigation.navigate("Success", {
+          successText: "Product added to menu!",
+          includeConfetti: false,
+          animation: "confirm",
+        });
+      } catch (error) {
+        console.error("Error adding product document:", error);
+      }
+    }
+  };
 
   return (
     <View>
@@ -84,7 +160,10 @@ const AddProductScreen = () => {
           />
         }
       />
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
         <ScrollView
           style={{ width: "100%" }}
           showsVerticalScrollIndicator={false}
@@ -93,52 +172,96 @@ const AddProductScreen = () => {
           <View style={styles.fieldContainer}>
             <Text style={styles.label}>Product</Text>
             <TextInput
-              style={styles.input}
+              style={[styles.input, invalidName && styles.inputError]}
+              placeholder="Product"
               autoCapitalize="sentences"
               autoFocus
               enterKeyHint="done"
               onChangeText={(text) => setProductName(text)}
             />
+            <FormErrorMessage
+              visible={invalidName}
+              message={"Product name cannot be empty!"}
+            />
           </View>
           <View style={styles.fieldContainer}>
-            <Text style={styles.label}>Category</Text> 
-            <SelectList
-            boxStyles={styles.dropdown}
-            searchPlaceholder="Search for category"
-            setSelected={setCategory}
-            data={data}
-            save="value"
+            <Text style={styles.label}>Category</Text>
+            {invalidCategory ? (
+              <SelectList
+                placeholder="Select Category"
+                boxStyles={styles.dropdownError}
+                searchPlaceholder="Search for category"
+                setSelected={setCategory}
+                data={data}
+                save="value"
+              />
+            ) : (
+              <SelectList
+                placeholder="Select Category"
+                boxStyles={styles.dropdown}
+                searchPlaceholder="Search for category"
+                setSelected={setCategory}
+                data={data}
+                save="value"
+              />
+            )}
+            <FormErrorMessage
+              visible={invalidCategory}
+              message={"Please select a category!"}
             />
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.label}>Product Image URL</Text>
             <TextInput
-              style={styles.input}
+              style={[styles.input, invalidURL && styles.inputError]}
+              placeholder="Product Image URL"
               autoCapitalize="sentences"
               textContentType="URL"
               keyboardType="url"
               enterKeyHint="done"
               onChangeText={(text) => setImageURL(text)}
             />
+            <FormErrorMessage
+              visible={invalidURL}
+              message={"Please add a product image!"}
+            />
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.label}>Price</Text>
             <TextInput
-              style={styles.input}
+              placeholder="Price"
+              style={[styles.input, invalidPrice && styles.inputError]}
               keyboardType="numeric"
               enterKeyHint="done"
               onChangeText={(text) => setPrice(text)}
+            />
+            <FormErrorMessage
+              visible={invalidPrice}
+              message={"Price cannot be empty!"}
+            />
+
+            <FormErrorMessage
+              visible={invalidPriceValue}
+              message={"Price must be greater than 0!"}
             />
           </View>
           <View style={styles.fieldContainer}>
             <Text style={styles.label}>Product Description</Text>
             <TextInput
-              style={styles.largeInput}
+              placeholder="Product Description"
+              style={[
+                styles.largeInput,
+                invalidDescription && styles.inputError,
+              ]}
               autoCapitalize="sentences"
               returnKeyType="done"
               enterKeyHint="done"
               onChangeText={(text) => setDescription(text)}
               multiline
+            />
+            <FormErrorMessage
+              visible={invalidDescription}
+              message={"Description cannot be empty!"}
             />
           </View>
           <TouchableOpacity style={styles.button} onPress={handleAddProduct}>
@@ -192,6 +315,10 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     fontSize: 16,
   },
+  inputError: {
+    borderColor: theme.colors.error,
+    borderWidth: 2,
+  },
   largeInput: {
     width: "100%",
     height: 200,
@@ -212,6 +339,10 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     color: theme.colors.placeholderText,
     fontSize: 16,
+  },
+  dropdownError: {
+    borderWidth: 2,
+    borderColor: theme.colors.error,
   },
 });
 

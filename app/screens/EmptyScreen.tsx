@@ -7,9 +7,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 const showIcon = (icon: string) => {
   switch(icon) {
     case 'shoppingCart':
-      return <Icon name="remove-shopping-cart" size={50} color="#808080" />
+      return <Icon name="remove-shopping-cart" size={50} color="#808080" testID="shoppingCartIcon"/>
     case 'empty':
-      return <Icon name="sentiment-very-dissatisfied" size={50} color="#808080" />
+      return <Icon name="sentiment-very-dissatisfied" size={50} color="#808080" testID="emptyIcon"/>
   }
 }
 

@@ -1,26 +1,14 @@
-import { NavigationContainer, useRoute } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { User, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { FIREBASE_AUTH } from "./FirebaseConfig";
 
 import React from "react";
-import { AllProductsScreen } from "./app/screens/AllProductsScreen";
-import { ProductDetailsScreen } from "./app/screens/ProductDetailsScreen";
 import { AppContext } from "./app/components/AppContext";
 import { CartItem } from "./app/utils/InterfaceUtils";
-import SuccessScreen from "./app/screens/SuccessScreen";
-import AddProductScreen from "./app/screens/AddProductScreen";
 import { AddressDetails } from "@stripe/stripe-react-native";
-import AddPromotionScreen from "./app/screens/AddPromotionScreen";
-import HomeScreen from "./app/screens/HomeScreen";
-import { CategoryProductsScreen } from "./app/screens/CategoryProductsScreen";
-import LoginScreen from "./app/screens/LoginScreen";
-import UserProfileScreen from "./app/screens/UserProfileScreen";
-import { DealProductsScreen } from "./app/screens/DealProductsScreen";
-import SignUpScreen from "./app/screens/SignUpScreen";
-
-const Stack = createNativeStackNavigator();
+import AppNavigator from "./app/components/AppNavigator";
 
 export default function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -46,7 +34,6 @@ export default function App() {
             setSigningOut(false);
           });
       } else {
-        // Sets menu to be invisible and waits for menu to be disabled before setting user so that the page below menu can be switched out.
         setMenuVisible(false);
         delayedSetUserTimeout = setTimeout(() => {
           setUser(authUser);
@@ -78,14 +65,6 @@ export default function App() {
     setMenuVisible(false);
   };
 
-  const ProductDetailsScreenFC = () => (
-    <ProductDetailsScreen route={useRoute()} />
-  );
-
-  const SuccessScreenFC = () => (
-  <SuccessScreen route={useRoute()} />
-  );
-
   return (
     <NavigationContainer>
       <AppContext.Provider
@@ -104,77 +83,7 @@ export default function App() {
           handleOpenCart: handleOpenCart,
         }}
       >
-        <Stack.Navigator initialRouteName="Home">
-          {user != null ? (
-            <>
-              <Stack.Screen
-                name="Home"
-                component={HomeScreen}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="AllProducts"
-                component={AllProductsScreen}
-                options={{ headerShown: false }}
-              />
-
-              <Stack.Screen
-                name="ProductDetails"
-                component={ProductDetailsScreenFC}
-                options={{ headerShown: false }}
-              />
-
-              <Stack.Screen
-                name="Category"
-                component={CategoryProductsScreen}
-                options={{ headerShown: false }}
-              />
-
-              <Stack.Screen
-                name="Deals"
-                component={DealProductsScreen}
-                options={{ headerShown: false }}
-              />
-
-              <Stack.Screen
-                name="Success"
-                component={SuccessScreenFC}
-                options={{ headerShown: false }}
-              />
-
-              <Stack.Screen
-                name="AddNewProduct"
-                component={AddProductScreen}
-                options={{ headerShown: false }}
-              />
-
-              <Stack.Screen
-                name="AddNewPromotion"
-                component={AddPromotionScreen}
-                options={{ headerShown: false }}
-              />
-
-              <Stack.Screen
-                name="UserProfile"
-                component={UserProfileScreen}
-                options={{ headerShown: false }}
-              />
-            </>
-          ) : (
-            <>
-            <Stack.Screen
-              name="Login"
-              component={LoginScreen}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="SignUp"
-              component={SignUpScreen}
-              options={{ headerShown: false }}
-            />
-            </>
-          )}
-        </Stack.Navigator>
+        <AppNavigator/>
       </AppContext.Provider>
     </NavigationContainer>
   );

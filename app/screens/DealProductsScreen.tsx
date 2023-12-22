@@ -20,6 +20,7 @@ import AppHeader from "../components/AppHeader";
 import NavigationScreen from "./NavigationScreen";
 import { CartScreen } from "./CartScreen";
 import { StackNavigationProp } from "@react-navigation/stack";
+import React from "react";
 
 type DealProductsScreenProp = RouteProp<RootStackParamList, "Deals">;
 

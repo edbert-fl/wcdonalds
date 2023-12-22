@@ -25,6 +25,7 @@ import SearchScreen from "./SearchScreen";
 import { MainHeader } from "../components/MainHeader";
 import AdminButton from "../components/AdminButton";
 import { useAppContext } from "../components/AppContext";
+import { isAdmin } from "../../Admin";
 
 export const HomeScreen: React.FC = () => {
   const [promotions, setPromotions] = useState<Promotion[]>([]);
@@ -32,6 +33,7 @@ export const HomeScreen: React.FC = () => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [searchPageVisible, setSearchPageVisible] = useState(false);
   const [search, setSearch] = useState("");
+
 
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
@@ -206,7 +208,13 @@ export const HomeScreen: React.FC = () => {
           </View>
         </ScrollView>
       </View>
-      <AdminButton />
+      {
+        isAdmin(authUser.uid) ? (
+          <AdminButton />
+        ) : (
+          null
+        )
+      }
     </View>
   );
 };

@@ -42,7 +42,7 @@ export const CartScreen = () => {
 
   const handleCheckOut = () => {
     const ordersCollecitonRef = collection(FIRESTORE_DB, "orders");
-    const orderItemsCollectionRef = collection(FIRESTORE_DB, "orderItems");
+    // const orderItemsCollectionRef = collection(FIRESTORE_DB, "orderItems");
     const productCollectionRef = collection(FIRESTORE_DB, "products");
 
     let newOrderItems: OrderItem[] = [];
@@ -58,7 +58,7 @@ export const CartScreen = () => {
 
       orderValue += cart[i].price * cart[i].quantity;
       newOrderItems.push(newOrderItem);
-      addDoc(orderItemsCollectionRef, newOrderItem);
+      // addDoc(orderItemsCollectionRef, newOrderItem);
     }
 
     addDoc(ordersCollecitonRef, {
@@ -163,7 +163,6 @@ export const styles = StyleSheet.create({
   cart: {
       flex: 1,
       backgroundColor: theme.colors.surface,
-      borderCurve: 10
   },
   cartContainer: {
     height: '100%',

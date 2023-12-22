@@ -31,19 +31,6 @@ const LoginScreen = () => {
         }
     }
 
-    const signUp = async () => {
-        setLoading(true);
-        try {
-            const response = await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password);
-            console.log("Successfully created new user");
-        } catch (error: any) {
-            console.log(error);
-            alert('Sign up failed: ' + error.message)
-        } finally {
-            setLoading(false);
-        }
-    }
-
     const loginAsGuest = async () => {
         setLoading(true);
         try {

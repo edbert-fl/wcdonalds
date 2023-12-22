@@ -9,6 +9,7 @@ import { FIREBASE_AUTH } from "../../FirebaseConfig";
 import Modal from "react-native-modal";
 import { theme } from "../utils/StylesUtils";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { useAppContext } from "../components/AppContext";
 
 interface NavigationMenuProps {
   admin: boolean;
@@ -53,6 +54,8 @@ const NavigationScreen: React.FC<NavigationMenuProps> = ({
     closeMenu();
   };
 
+  const { authUser } = useAppContext();
+
   return (
     <View style={{backgroundColor: 'red'}}>
       <Modal
@@ -68,7 +71,7 @@ const NavigationScreen: React.FC<NavigationMenuProps> = ({
         <View style={styles.menuContainer}>
           <View style={styles.menuContent}>
             <View style={styles.closeButtonContainer}>
-              <TouchableOpacity onPress={closeMenu}>
+              <TouchableOpacity onPress={closeMenu} testID="CloseButton">
                 <Icon name="close" size={35} style={styles.closeButton} />
               </TouchableOpacity>
             </View>
@@ -76,9 +79,13 @@ const NavigationScreen: React.FC<NavigationMenuProps> = ({
               <TouchableOpacity onPress={navigateHome}>
                 <Text style={styles.menuItem}>Home</Text>
               </TouchableOpacity>
+              { authUser?.isAnonymous ? (
+                null
+              ) : (
               <TouchableOpacity onPress={navigateToProfile}>
                 <Text style={styles.menuItem}>My Profile</Text>
               </TouchableOpacity>
+              )}
               <TouchableOpacity onPress={navigateToMenu}>
                 <Text style={styles.menuItem}>Our Menu</Text>
               </TouchableOpacity>

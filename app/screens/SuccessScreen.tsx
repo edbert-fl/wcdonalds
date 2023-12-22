@@ -39,7 +39,9 @@ const SuccessScreen: React.FC<AddToCartSuccessProps> = ({ route }) => {
 
     return (
         <View style={successStyles.container}>
-            {showAnimation(animation)}
+            <View style={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                {showAnimation(animation)}
+            </View>
             <Text style={successStyles.text}>{successText}</Text>
             <TouchableOpacity style={successStyles.button} onPress={() => navigation.navigate("AllProducts")}>
                 <Text style={successStyles.buttonText}>Back to Menu</Text>

@@ -8,7 +8,6 @@ import { cartStyles } from "../utils/StylesUtils";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { RootStackParamList } from "../utils/TypesUtils";
-import AddToCartAnimation from "./animations/AddToCartAnimation";
 
 interface AddToCartButtonProps {
   productID: string;
@@ -65,7 +64,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
 
   function handleAddToCart(productID: string, quantity: number) {
     console.log(
-      "AddToCartButton.tsx: Adding to cart >>>",
+      "Cart: Adding to cart >>>",
       { productID, quantity },
       "\n"
     );
@@ -79,11 +78,11 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
 
           if (existingItemIndex !== -1) {
             console.log(
-              "AddToCartButton.tsx: Duplicate item found."
+              "Cart: Duplicate item found."
             );
             if (quantity === 0) {
               console.log(
-                "AddToCartButton.tsx: Removing item..."
+                "Cart: Removing item..."
               );
               let tempCart = [...cart];
               tempCart = tempCart.filter((_, index) => index !== existingItemIndex);
@@ -91,7 +90,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
               navigation.navigate('Success', { successText: "Item removed from cart.", includeConfetti: false, animation: null});
             } else {
               console.log(
-                "AddToCartButton.tsx: Updating item quantity..."
+                "Cart: Updating item quantity..."
               );
               let tempCart = [...cart];
               tempCart[existingItemIndex].quantity = quantity;
@@ -100,7 +99,7 @@ const AddToCartButton: React.FC<AddToCartButtonProps> = ({
             }
           } else {
             console.log(
-              "AddToCartButton.tsx: No duplicate item found. Adding item to cart..."
+              "Cart: No duplicate item found. Adding item to cart..."
             );
             setCart((prevCart) => [...prevCart, fetchedProduct]);
             navigation.navigate('Success', { successText: "Item added to cart!", includeConfetti: true, animation: "addToCart" });

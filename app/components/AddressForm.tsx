@@ -1,7 +1,6 @@
 import { View, Text, Alert } from "react-native";
 import React, { useState } from "react";
 import {
-  StripeProvider,
   AddressSheet,
   AddressSheetError,
   AddressDetails,

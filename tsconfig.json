@@ -7,7 +7,7 @@
       "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "@env.d.tsx"],
+  "include": ["**/*.tsx"],
   "esModuleInterop": true,
   "typeRoots": ["./types"]
 }
