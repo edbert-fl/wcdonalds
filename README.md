@@ -123,7 +123,7 @@ const signUp = async () => {
 
 ### Adding to Cart
 
-<img src="https://github.com/edbert-fl/wcdonalds/assets/102503467/9f6a2095-9c55-482f-abd9-0e1c020e80c3" hspace="10" alt="Create Account GIF" align="center" width="200" />
+<img src="https://github.com/edbert-fl/wcdonalds/assets/102503467/9f6a2095-9c55-482f-abd9-0e1c020e80c3" hspace="10" alt="Add to Cart GIF" align="center" width="200" />
 
 Adding items to cart is a key feature in many kinds of ordering platforms for enhancing user interaction and facilitating a rewarding shopping experience. Here in the code the logic handles various scenarios:
 
@@ -197,7 +197,7 @@ function handleAddToCart(productID: string, quantity: number) {
 
 ### Reorder from History
 
-![reorder](https://github.com/edbert-fl/wcdonalds/assets/102503467/91791068-e608-4913-9c1b-35ba74900059)
+<img src="https://github.com/edbert-fl/wcdonalds/assets/102503467/91791068-e608-4913-9c1b-35ba74900059" hspace="10" alt="Reorder GIF" align="center" width="200" />
 
 The `handleReorder` function is designed to streamline the reordering process of items from a previous order. Upon receiving the orderID as a parameter, the function initiates an asynchronous process to fetch the specific order document from the "orders" collection in the Firestore database then add all the items in that previous order to the user’s cart. This function allows users to recreate their preferred orders making the app more user-friendly and convenient.
 
