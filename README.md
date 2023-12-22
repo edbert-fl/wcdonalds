@@ -13,13 +13,6 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<p align="center">
-  <img src="https://github.com/edbert-fl/wcdonalds/assets/102503467/8f534b91-9a4b-4d23-89bd-c389a3400664" alt="Screenshot 1" width="200">
-<!--   <img src="https://github.com/edbert-fl/wcdonalds/assets/102503467/8f534b91-9a4b-4d23-89bd-c389a3400664" alt="Screenshot 2" width="200">
-  <img src="https://github.com/edbert-fl/wcdonalds/assets/102503467/8f534b91-9a4b-4d23-89bd-c389a3400664" alt="Screenshot 3" width="200">
-  <img src="https://github.com/edbert-fl/wcdonalds/assets/102503467/8f534b91-9a4b-4d23-89bd-c389a3400664" alt="Screenshot 4" width="200"> -->
-</p>
-
 Welcome to my side project – a fast food mobile app clone built with React Native and using TypeScript. This app promises a seamless and delightful culinary ordering experience for users on both iOS and Android devices.
 
 At the core of this project is Firebase for user authentication and the database and many important aspects of the app were tested using Jest. This guarantees that the app not only meets but exceeds expectations, providing users with a reliable, responsive, and delightful ordering experience.
