@@ -93,8 +93,10 @@ This script will create necessary sample collections and documents for use in th
 
 ### User Authentication
 
-<img src="https://github.com/edbert-fl/wcdonalds/assets/102503467/278e0c17-2281-4563-9fa8-a911fc83baa1" hspace="10" alt="Create Account GIF" align="center" width="200" />
-  
+<p align="center">
+  <img src="https://github.com/edbert-fl/wcdonalds/assets/102503467/278e0c17-2281-4563-9fa8-a911fc83baa1" hspace="10" alt="Create Account GIF" align="center" width="200" />
+</p>
+
 The application features a versatile user authentication system powered by Firebase, allowing users to choose to create accounts for a personalized experience, log in seamlessly with existing credentials, or explore the app anonymously for instant access without mandatory sign-up. This flexibility caters to a diverse user base, prioritizing user-centric design and inclusivity.
 
 In addition to enhancing user experience, the authentication system is underpinned by robust security measures kept up to date by Firebase, ensuring the safeguarding of user accounts and data.
@@ -123,7 +125,9 @@ const signUp = async () => {
 
 ### Adding to Cart
 
-<img src="https://github.com/edbert-fl/wcdonalds/assets/102503467/9f6a2095-9c55-482f-abd9-0e1c020e80c3" hspace="10" alt="Add to Cart GIF" align="center" width="200" />
+<p align="center">
+  <img src="https://github.com/edbert-fl/wcdonalds/assets/102503467/9f6a2095-9c55-482f-abd9-0e1c020e80c3" hspace="10" alt="Add to Cart GIF" align="center" width="200" />
+</p>
 
 Adding items to cart is a key feature in many kinds of ordering platforms for enhancing user interaction and facilitating a rewarding shopping experience. Here in the code the logic handles various scenarios:
 
@@ -197,7 +201,9 @@ function handleAddToCart(productID: string, quantity: number) {
 
 ### Reorder from History
 
-<img src="https://github.com/edbert-fl/wcdonalds/assets/102503467/91791068-e608-4913-9c1b-35ba74900059" hspace="10" alt="Reorder GIF" align="center" width="200" />
+<p align="center">
+  <img src="https://github.com/edbert-fl/wcdonalds/assets/102503467/91791068-e608-4913-9c1b-35ba74900059" hspace="10" alt="Reorder GIF" align="center" width="200" />
+</p>
 
 The `handleReorder` function is designed to streamline the reordering process of items from a previous order. Upon receiving the orderID as a parameter, the function initiates an asynchronous process to fetch the specific order document from the "orders" collection in the Firestore database then add all the items in that previous order to the user’s cart. This function allows users to recreate their preferred orders making the app more user-friendly and convenient.
 
@@ -209,8 +215,6 @@ const handleReorder = async (orderID: string) => {
       const ordersCollectionRef = collection(FIRESTORE_DB, "orders");
       const orderDocumentRef = doc(ordersCollectionRef, orderID);
       const orderDocument = await getDoc(orderDocumentRef);
-
-      console.log("\n\nDEBUG >>>", "orderDocument", orderDocument);
 
       if (orderDocument.exists()) {
         const orderData = orderDocument.data();
