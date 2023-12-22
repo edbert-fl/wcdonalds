@@ -119,6 +119,8 @@ const signUp = async () => {
   }
 ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ### Adding to Cart
 
 <img src="https://github.com/edbert-fl/wcdonalds/assets/102503467/9f6a2095-9c55-482f-abd9-0e1c020e80c3" hspace="10" alt="Create Account GIF" align="center" width="200" />
@@ -193,7 +195,58 @@ function handleAddToCart(productID: string, quantity: number) {
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### Reorder from History
 
+![reorder](https://github.com/edbert-fl/wcdonalds/assets/102503467/91791068-e608-4913-9c1b-35ba74900059)
+
+The `handleReorder` function is designed to streamline the reordering process of items from a previous order. Upon receiving the orderID as a parameter, the function initiates an asynchronous process to fetch the specific order document from the "orders" collection in the Firestore database then add all the items in that previous order to the user’s cart. This function allows users to recreate their preferred orders making the app more user-friendly and convenient.
+
+```typescript
+const handleReorder = async (orderID: string) => {
+    let cartItems: CartItem[] = [];
+
+    try {
+      const ordersCollectionRef = collection(FIRESTORE_DB, "orders");
+      const orderDocumentRef = doc(ordersCollectionRef, orderID);
+      const orderDocument = await getDoc(orderDocumentRef);
+
+      console.log("\n\nDEBUG >>>", "orderDocument", orderDocument);
+
+      if (orderDocument.exists()) {
+        const orderData = orderDocument.data();
+        const orderItems = orderData.itemsInOrder;
+
+        for (let i = 0; i < orderItems.length; i++) {
+          const orderItem = orderItems[i]
+          const productDocument = await getDoc(orderItem.orderedItem);
+
+          if (productDocument.exists()) {
+            const productData = productDocument.data() as Product;
+
+            const cartItem: CartItem = {
+              productID: productDocument.id,
+              name: productData.name,
+              description: productData.description,
+              price: productData.price,
+              image: productData.image,
+              quantity: orderItem.orderQuantity,
+            };
+
+            cartItems.push(cartItem);
+          }
+        }
+      }
+
+      setCart(cartItems);
+      navigation.navigate("Home");
+      handleOpenCart();
+    } catch (error: any) {
+      console.error("Error handling reorder:", error.message);
+    }
+  };
+```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Sprint Backlogs
