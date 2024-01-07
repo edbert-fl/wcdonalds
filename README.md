@@ -288,17 +288,6 @@ Don't forget to give the project a star! Thanks again!
 
 Edbert Felix Lim - edbert.fl@gmail.com
 
-Project Link: [https://github.com/edbert-fl/wcdonalds](https://github.com/edbert-fl/wcdonalds)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-* []()
-* []()
-* []()
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
