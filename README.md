@@ -19,6 +19,31 @@ At the core of this project is Firebase for user authentication and the database
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Features
+
+### 📱 Cross-Platform Compatibility:
+- Runs on both iOS and Android
+
+### 🔐 Authentication:
+- User Authentication using Firebase Authentication
+
+### 👩‍💼 Admin Features:
+- Admins can add products and promotions
+
+### 🛒 Shopping Cart:
+- Items can be added to the cart
+- Cart items can be edited
+- Cart and user information are saved in Async Storage
+
+### 📦 Order Management:
+- Users can see their previous order history
+- Users can order from their previous orders
+
+### 🔍 Search and Filter:
+- Users can view all available items
+- Users can search for items easily
+- Users can filter items by category
+
 <!-- GETTING STARTED -->
 # Getting Started
 
